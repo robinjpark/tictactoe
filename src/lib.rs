@@ -327,13 +327,24 @@ mod tests {
                                         -O-\
                                         O-X");
         assert_eq!(board.get_game_result(), GameResult::Win(Player::O));
+    } // test_winning_game()
 
+    #[test]
+    fn test_no_winner_game() {
         let board = Board::from_string("XOX\
                                         XXO\
                                         OXO");
         assert_eq!(board.get_game_result(), GameResult::Draw);
+    }
 
+    #[test]
+    fn test_in_progress_game() {
         let board = Board::new();
+        assert_eq!(board.get_game_result(), GameResult::InProgress);
+
+        let board = Board::from_string("XOX\
+                                        X-O\
+                                        OXO");
         assert_eq!(board.get_game_result(), GameResult::InProgress);
     }
 }
