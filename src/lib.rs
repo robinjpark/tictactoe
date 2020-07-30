@@ -6,6 +6,19 @@ enum Player {
 }
 
 #[allow(dead_code)]
+struct Position {
+    row: u8,
+    column: u8,
+}
+
+impl Position {
+    #[allow(dead_code)]
+    fn new(row: u8, column: u8) -> Position {
+        Position{ row, column }
+    }
+}
+
+#[allow(dead_code)]
 struct Board {
     positions: [[Option<Player>; 3]; 3],
 }
@@ -16,6 +29,11 @@ impl Board {
         Board { positions: [[None, None, None],
                             [None, None, None],
                             [None, None, None]]}
+    }
+
+    #[allow(dead_code)]
+    fn add_move(&mut self, player: Player, at: Position) {
+        self.positions[at.row as usize][at.column as usize] = Some(player);
     }
 }
 
@@ -40,5 +58,12 @@ mod tests {
                 assert_eq!(None, empty.positions[row][column]);
             }
         }
+    }
+
+    #[test]
+    fn test_add_to_board() {
+        let mut board = Board::new();
+        board.add_move(Player::X, Position::new(0, 0));
+        assert_eq!(Some(Player::X), board.positions[0][0]);
     }
 }
