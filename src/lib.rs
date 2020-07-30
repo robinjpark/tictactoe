@@ -62,10 +62,8 @@ impl Board {
             panic!("Invalid string length {} for board: '{}'", contents.len(), contents);
         }
 
+        let blank_count = contents.chars().filter(|the_char| *the_char == '-').collect::<Vec<char>>().len();
         let mut chars = contents.chars();
-        let blanks = contents.chars().filter(|the_char| *the_char == '-');
-        let blank_count = blanks.collect::<Vec<char>>();
-        let blank_count = blank_count.len();
             Board { positions: [[Player::from_char(chars.next().unwrap()),
                              Player::from_char(chars.next().unwrap()),
                              Player::from_char(chars.next().unwrap())],
