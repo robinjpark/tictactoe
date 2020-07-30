@@ -68,11 +68,16 @@ impl Board {
     // TODO: Is it necessary to check for more illegal strings?
     // For example:
     // - multiple winners
-    // - invalid numbers of Xs and Os
     // Probably not, as this is only meant for use in unit testing.
     fn from_string(contents: &str) -> Board {
         if contents.len() != 9 {
             panic!("Invalid string length {} for board: '{}'", contents.len(), contents);
+        }
+        let x_count: i8 = contents.chars().filter(|the_char| *the_char == 'X').collect::<Vec<char>>().len() as i8;
+        let o_count: i8 = contents.chars().filter(|the_char| *the_char == 'O').collect::<Vec<char>>().len() as i8;
+        let diff_count = x_count - o_count;
+        if diff_count != 0 && diff_count != 1 {
+            panic!("Invalid number of Xs and Os!");
         }
 
         let blank_count = contents.chars().filter(|the_char| *the_char == '-').collect::<Vec<char>>().len();
@@ -300,6 +305,14 @@ mod tests {
     }
 
     #[test]
+    #[should_panic(expected = "Invalid number of Xs and Os")]
+    fn test_invalid_board_from_string_bad_ratio() {
+        let _invalid_length_board = Board::from_string("XXX\
+                                                        ---\
+                                                        --O");
+    }
+
+    #[test]
     fn test_add_to_board() {
         let mut board = Board::new();
 
@@ -366,9 +379,9 @@ mod tests {
 
         let board = Board::from_string("XOX\
                                         ---\
-                                        OXX");
+                                        OOX");
         println!("{}", board);
-        assert_eq!(format!("{}", board), "=====\n|XOX|\n|   |\n|OXX|\n=====");
+        assert_eq!(format!("{}", board), "=====\n|XOX|\n|   |\n|OOX|\n=====");
     }
 
     #[test]
@@ -389,11 +402,11 @@ mod tests {
 
         let board = Board::from_string("XX-\
                                         OOO\
-                                        ---");
+                                        X--");
         assert_eq!(board.get_game_result(), GameResult::Win(Player::O));
 
         let board = Board::from_string("XX-\
-                                        ---\
+                                        X--\
                                         OOO");
         assert_eq!(board.get_game_result(), GameResult::Win(Player::O));
 
@@ -404,7 +417,7 @@ mod tests {
 
         let board = Board::from_string("XO-\
                                         -O-\
-                                        XO-");
+                                        XOX");
         assert_eq!(board.get_game_result(), GameResult::Win(Player::O));
 
         let board = Board::from_string("-OX\
@@ -418,7 +431,7 @@ mod tests {
         assert_eq!(board.get_game_result(), GameResult::Win(Player::X));
 
         let board = Board::from_string("X-O\
-                                        -O-\
+                                        XO-\
                                         O-X");
         assert_eq!(board.get_game_result(), GameResult::Win(Player::O));
     } // test_winning_game()
