@@ -5,6 +5,20 @@ enum Player {
     O,
 }
 
+impl Player {
+    #[allow(dead_code)]
+    fn from_char(value: char) -> Option<Player> {
+        if value == 'X' {
+            Some(Player::X)
+        } else if value == 'O' {
+            Some(Player::O)
+        } else {
+            None
+        }
+    }
+
+}
+
 #[allow(dead_code)]
 struct Position {
     row: u8,
@@ -25,6 +39,7 @@ impl Position {
 }
 
 #[allow(dead_code)]
+#[derive(PartialEq, Debug)]
 struct Board {
     positions: [[Option<Player>; 3]; 3],
     turn_number: u8,
@@ -37,6 +52,26 @@ impl Board {
                             [None, None, None],
                             [None, None, None]],
                 turn_number: 1 } // Starts at 1, not 0!
+    }
+
+    #[cfg(test)]
+    fn from_string(contents: &str) -> Board {
+        println!("contents are: '{}, length {}'", contents, contents.len());
+        let mut chars = contents.chars();
+        let blanks = contents.chars().filter(|the_char| *the_char == '-');
+        let blank_count = blanks.collect::<Vec<char>>();
+        let blank_count = blank_count.len();
+            Board { positions: [[Player::from_char(chars.next().unwrap()),
+                             Player::from_char(chars.next().unwrap()),
+                             Player::from_char(chars.next().unwrap())],
+                            [Player::from_char(chars.next().unwrap()),
+                             Player::from_char(chars.next().unwrap()),
+                             Player::from_char(chars.next().unwrap())],
+                            [Player::from_char(chars.next().unwrap()),
+                             Player::from_char(chars.next().unwrap()),
+                             Player::from_char(chars.next().unwrap())]],
+                    turn_number: 9 - blank_count as u8 + 1
+            }
     }
 
     #[allow(dead_code)]
@@ -117,6 +152,22 @@ mod tests {
                 assert_eq!(None, empty.positions[row][column]);
             }
         }
+    }
+
+    #[test]
+    fn test_board_from_string() {
+        let full_board = Board::from_string("XOX\
+                                             OXO\
+                                             XOX");
+        assert_eq!(Some(Player::X), full_board.positions[0][0]);
+        assert_eq!(10, full_board.turn_number);
+
+        let empty_board = Board::from_string("---\
+                                              ---\
+                                              ---");
+        assert_eq!(None, empty_board.positions[0][0]);
+        assert_eq!(1, empty_board.turn_number);
+        assert_eq!(Board::new(), empty_board);
     }
 
     #[test]
