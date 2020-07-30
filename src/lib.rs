@@ -90,7 +90,28 @@ mod tests {
     #[test]
     fn test_add_to_board() {
         let mut board = Board::new();
+
         board.add_move(Player::X, Position::new(0, 0));
         assert_eq!(Some(Player::X), board.positions[0][0]);
+
+        board.add_move(Player::O, Position::new(1, 1));
+        assert_eq!(Some(Player::O), board.positions[1][1]);
+
+        board.add_move(Player::X, Position::new(0, 1));
+        board.add_move(Player::O, Position::new(0, 2));
+        board.add_move(Player::X, Position::new(1, 0));
+        board.add_move(Player::O, Position::new(1, 2));
+        board.add_move(Player::X, Position::new(2, 0));
+        board.add_move(Player::O, Position::new(2, 1));
+        board.add_move(Player::X, Position::new(2, 2));
+
+        assert_eq!(Some(Player::X), board.positions[0][1]);
+        assert_eq!(Some(Player::X), board.positions[1][0]);
+        assert_eq!(Some(Player::X), board.positions[2][0]);
+        assert_eq!(Some(Player::X), board.positions[2][2]);
+
+        assert_eq!(Some(Player::O), board.positions[0][2]);
+        assert_eq!(Some(Player::O), board.positions[1][2]);
+        assert_eq!(Some(Player::O), board.positions[2][1]);
     }
 }
