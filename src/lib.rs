@@ -144,6 +144,63 @@ impl Board {
     }
 }
 
+impl std::fmt::Display for Board {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        // Will look something like:
+        // =====
+        // |X O|
+        // | X |
+        // |OOX|
+        // =====
+        write!(f, "=====\n|{}{}{}|\n|{}{}{}|\n|{}{}{}|\n=====",
+               match self.positions[0][0] {
+                   Some(Player::X) => "X",
+                   Some(Player::O) => "O",
+                   None => " ",
+               },
+               match self.positions[0][1] {
+                   Some(Player::X) => "X",
+                   Some(Player::O) => "O",
+                   None => " ",
+               },
+               match self.positions[0][2] {
+                   Some(Player::X) => "X",
+                   Some(Player::O) => "O",
+                   None => " ",
+               },
+               match self.positions[1][0] {
+                   Some(Player::X) => "X",
+                   Some(Player::O) => "O",
+                   None => " ",
+               },
+               match self.positions[1][1] {
+                   Some(Player::X) => "X",
+                   Some(Player::O) => "O",
+                   None => " ",
+               },
+               match self.positions[1][2] {
+                   Some(Player::X) => "X",
+                   Some(Player::O) => "O",
+                   None => " ",
+               },
+               match self.positions[2][0] {
+                   Some(Player::X) => "X",
+                   Some(Player::O) => "O",
+                   None => " ",
+               },
+               match self.positions[2][1] {
+                   Some(Player::X) => "X",
+                   Some(Player::O) => "O",
+                   None => " ",
+               },
+               match self.positions[2][2] {
+                   Some(Player::X) => "X",
+                   Some(Player::O) => "O",
+                   None => " ",
+               })
+    }
+}
+
 #[allow(dead_code)]
 #[derive(Debug, PartialEq)]
 enum GameResult {
@@ -166,7 +223,7 @@ mod tests {
     }
 
     #[test]
-    fn test_player_printing() {
+    fn test_player_display() {
         let x = Player::X;
         let o = Player::O;
         assert_eq!(format!("{}", x), "X");
@@ -293,6 +350,20 @@ mod tests {
 
         board.add_move(Player::X, Position::new(1, 1));
         board.add_move(Player::X, Position::new(2, 2));
+    }
+
+    #[test]
+    fn test_board_display() {
+        let board = Board::from_string("XOX\
+                                        OXO\
+                                        OXX");
+        assert_eq!(format!("{}", board), "=====\n|XOX|\n|OXO|\n|OXX|\n=====");
+
+        let board = Board::from_string("XOX\
+                                        ---\
+                                        OXX");
+        println!("{}", board);
+        assert_eq!(format!("{}", board), "=====\n|XOX|\n|   |\n|OXX|\n=====");
     }
 
     #[test]
