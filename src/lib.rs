@@ -12,11 +12,12 @@ impl Player {
             Some(Player::X)
         } else if value == 'O' {
             Some(Player::O)
-        } else {
+        } else if value == '-' {
             None
+        } else {
+            panic!("Invalid character for player: '{}'", value);
         }
     }
-
 }
 
 #[allow(dead_code)]
@@ -57,6 +58,10 @@ impl Board {
     #[cfg(test)]
     fn from_string(contents: &str) -> Board {
         println!("contents are: '{}, length {}'", contents, contents.len());
+        if contents.len() != 9 {
+            panic!("Invalid string length {} for board: '{}'", contents.len(), contents);
+        }
+
         let mut chars = contents.chars();
         let blanks = contents.chars().filter(|the_char| *the_char == '-');
         let blank_count = blanks.collect::<Vec<char>>();
@@ -168,6 +173,22 @@ mod tests {
         assert_eq!(None, empty_board.positions[0][0]);
         assert_eq!(1, empty_board.turn_number);
         assert_eq!(Board::new(), empty_board);
+    }
+
+    #[test]
+    #[should_panic(expected = "Invalid character for player")]
+    fn test_invalid_board_from_string_bad_char() {
+        let _invalid_player_board = Board::from_string("XOX\
+                                                        O O\
+                                                        XOX");
+    }
+
+    #[test]
+    #[should_panic(expected = "Invalid string length 10")]
+    fn test_invalid_board_from_string_bad_length() {
+        let _invalid_length_board = Board::from_string("XOX\
+                                                        OXO\
+                                                        XOXO");
     }
 
     #[test]
