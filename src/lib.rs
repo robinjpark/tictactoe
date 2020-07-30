@@ -94,14 +94,45 @@ impl Board {
 
     #[allow(dead_code)]
     fn get_game_result(self) -> GameResult {
-        if let Some(player) = self.positions[0][0] {
-            if self.positions[0][1] == Some(player) &&
-               self.positions[0][2] == Some(player) {
-                   return GameResult::Win(player)
+        for row in 0..3 {
+            if let Some(player) = self.positions[row][0] {
+                if self.positions[row][1] == Some(player) &&
+                   self.positions[row][2] == Some(player) {
+                       return GameResult::Win(player);
+                }
             }
         }
 
-        panic!("Finish me!!!");
+        for column in 0..3 {
+            if let Some(player) = self.positions[0][column] {
+                if self.positions[1][column] == Some(player) &&
+                   self.positions[2][column] == Some(player) {
+                       return GameResult::Win(player);
+                }
+            }
+        }
+
+        // diagonal in direction '\'
+        if let Some(player) = self.positions[0][0] {
+            if self.positions[1][1] == Some(player) &&
+               self.positions[2][2] == Some(player) {
+                   return GameResult::Win(player);
+            }
+        }
+
+        // diagonal in direction '/'
+        if let Some(player) = self.positions[2][0] {
+            if self.positions[1][1] == Some(player) &&
+               self.positions[0][2] == Some(player) {
+                   return GameResult::Win(player);
+            }
+        }
+
+        if self.turn_number <= 9 {
+            GameResult::InProgress
+        } else {
+            GameResult::Draw
+        }
     }
 }
 
@@ -257,5 +288,53 @@ mod tests {
         board.add_move(Player::O, Position::new(1, 1));
         board.add_move(Player::X, Position::new(0, 2));
         assert_eq!(board.get_game_result(), GameResult::Win(Player::X));
+
+        let board = Board::from_string("XXX\
+                                        OO-\
+                                        ---");
+        assert_eq!(board.get_game_result(), GameResult::Win(Player::X));
+
+        let board = Board::from_string("XX-\
+                                        OOO\
+                                        ---");
+        assert_eq!(board.get_game_result(), GameResult::Win(Player::O));
+
+        let board = Board::from_string("XX-\
+                                        ---\
+                                        OOO");
+        assert_eq!(board.get_game_result(), GameResult::Win(Player::O));
+
+        let board = Board::from_string("XO-\
+                                        XO-\
+                                        X--");
+        assert_eq!(board.get_game_result(), GameResult::Win(Player::X));
+
+        let board = Board::from_string("XO-\
+                                        -O-\
+                                        XO-");
+        assert_eq!(board.get_game_result(), GameResult::Win(Player::O));
+
+        let board = Board::from_string("-OX\
+                                        --X\
+                                        -OX");
+        assert_eq!(board.get_game_result(), GameResult::Win(Player::X));
+
+        let board = Board::from_string("X-O\
+                                        -X-\
+                                        O-X");
+        assert_eq!(board.get_game_result(), GameResult::Win(Player::X));
+
+        let board = Board::from_string("X-O\
+                                        -O-\
+                                        O-X");
+        assert_eq!(board.get_game_result(), GameResult::Win(Player::O));
+
+        let board = Board::from_string("XOX\
+                                        XXO\
+                                        OXO");
+        assert_eq!(board.get_game_result(), GameResult::Draw);
+
+        let board = Board::new();
+        assert_eq!(board.get_game_result(), GameResult::InProgress);
     }
 }
