@@ -65,6 +65,11 @@ impl Board {
     }
 
     #[cfg(test)]
+    // TODO: Is it necessary to check for more illegal strings?
+    // For example:
+    // - multiple winners
+    // - invalid numbers of Xs and Os
+    // Probably not, as this is only meant for use in unit testing.
     fn from_string(contents: &str) -> Board {
         if contents.len() != 9 {
             panic!("Invalid string length {} for board: '{}'", contents.len(), contents);
