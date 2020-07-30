@@ -14,6 +14,12 @@ struct Position {
 impl Position {
     #[allow(dead_code)]
     fn new(row: u8, column: u8) -> Position {
+        if row > 2 {
+            panic!("Invalid row: {}", row);
+        }
+        if column > 2 {
+            panic!("Invalid column: {}", column);
+        }
         Position{ row, column }
     }
 }
@@ -57,6 +63,18 @@ mod tests {
 
         assert_eq!(Position::new(1, 2).row, 1);
         assert_eq!(Position::new(1, 2).column, 2);
+    }
+
+    #[test]
+    #[should_panic(expected = "Invalid row: 3")]
+    fn test_position_ctor_invalid_row() {
+        let _position = Position::new(3, 0);
+    }
+
+    #[test]
+    #[should_panic(expected = "Invalid column: 3")]
+    fn test_position_ctor_invalid_column() {
+        let _position = Position::new(0, 3);
     }
 
     #[test]
