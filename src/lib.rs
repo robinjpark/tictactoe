@@ -51,6 +51,15 @@ mod tests {
     }
 
     #[test]
+    fn test_position_ctor_success() {
+        assert_eq!(Position::new(0, 0).row, 0);
+        assert_eq!(Position::new(0, 0).column, 0);
+
+        assert_eq!(Position::new(1, 2).row, 1);
+        assert_eq!(Position::new(1, 2).column, 2);
+    }
+
+    #[test]
     fn test_empty_board() {
         let empty = Board::new();
         for row in 0..2 {
