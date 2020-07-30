@@ -20,6 +20,15 @@ impl Player {
     }
 }
 
+impl std::fmt::Display for Player {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match *self {
+            Player::X => write!(f, "X"),
+            Player::O => write!(f, "O"),
+        }
+    }
+}
+
 #[allow(dead_code)]
 struct Position {
     row: u8,
@@ -148,12 +157,21 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_player() {
+    fn test_player_equality() {
         let player1 = Player::X;
         let player2 = Player::O;
         let player3 = Player::X;
         assert_ne!(player1, player2);
         assert_eq!(player1, player3);
+    }
+
+    #[test]
+    fn test_player_printing() {
+        let x = Player::X;
+        let o = Player::O;
+        assert_eq!(format!("{}", x), "X");
+        assert_eq!(format!("{}", o), "O");
+        assert_eq!(format!("{}{}", x, o), "XO");
     }
 
     #[test]
