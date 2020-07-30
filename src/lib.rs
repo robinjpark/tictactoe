@@ -27,6 +27,7 @@ impl Position {
 #[allow(dead_code)]
 struct Board {
     positions: [[Option<Player>; 3]; 3],
+    turn_number: u8,
 }
 
 impl Board {
@@ -34,15 +35,23 @@ impl Board {
     fn new() -> Board {
         Board { positions: [[None, None, None],
                             [None, None, None],
-                            [None, None, None]]}
+                            [None, None, None]],
+                turn_number: 1 } // Starts at 1, not 0!
     }
 
     #[allow(dead_code)]
     fn add_move(&mut self, player: Player, at: Position) {
+        if player == Player::X && self.turn_number % 2 == 0 {
+            panic!("It is not X's turn!");
+        }
+        if player == Player::O && self.turn_number % 2 == 1 {
+            panic!("It is not O's turn!");
+        }
         if let Some(_player) = self.positions[at.row as usize][at.column as usize] {
             panic!("Position [{},{}] is already occupied!", at.row, at.column);
         }
         self.positions[at.row as usize][at.column as usize] = Some(player);
+        self.turn_number += 1;
     }
 }
 
@@ -96,9 +105,11 @@ mod tests {
 
         board.add_move(Player::X, Position::new(0, 0));
         assert_eq!(Some(Player::X), board.positions[0][0]);
+        assert_eq!(2, board.turn_number);
 
         board.add_move(Player::O, Position::new(1, 1));
         assert_eq!(Some(Player::O), board.positions[1][1]);
+        assert_eq!(3, board.turn_number);
 
         board.add_move(Player::X, Position::new(0, 1));
         board.add_move(Player::O, Position::new(0, 2));
@@ -106,6 +117,7 @@ mod tests {
         board.add_move(Player::O, Position::new(1, 2));
         board.add_move(Player::X, Position::new(2, 0));
         board.add_move(Player::O, Position::new(2, 1));
+        assert_eq!(9, board.turn_number);
         board.add_move(Player::X, Position::new(2, 2));
 
         assert_eq!(Some(Player::X), board.positions[0][1]);
@@ -116,6 +128,7 @@ mod tests {
         assert_eq!(Some(Player::O), board.positions[0][2]);
         assert_eq!(Some(Player::O), board.positions[1][2]);
         assert_eq!(Some(Player::O), board.positions[2][1]);
+
     }
 
     #[test]
@@ -127,4 +140,20 @@ mod tests {
         board.add_move(Player::O, Position::new(1, 2));
     }
 
+    #[test]
+    #[should_panic(expected = "It is not O's turn!")]
+    fn test_wrong_starting_player() {
+        let mut board = Board::new();
+
+        board.add_move(Player::O, Position::new(1, 1));
+    }
+
+    #[test]
+    #[should_panic(expected = "It is not X's turn!")]
+    fn test_wrong_players_turn() {
+        let mut board = Board::new();
+
+        board.add_move(Player::X, Position::new(1, 1));
+        board.add_move(Player::X, Position::new(2, 2));
+    }
 }
