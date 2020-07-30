@@ -1,5 +1,5 @@
 #[allow(dead_code)]
-#[derive(Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 enum Player {
     X,
     O,
@@ -39,6 +39,9 @@ impl Board {
 
     #[allow(dead_code)]
     fn add_move(&mut self, player: Player, at: Position) {
+        if let Some(_player) = self.positions[at.row as usize][at.column as usize] {
+            panic!("Position [{},{}] is already occupied!", at.row, at.column);
+        }
         self.positions[at.row as usize][at.column as usize] = Some(player);
     }
 }
@@ -114,4 +117,14 @@ mod tests {
         assert_eq!(Some(Player::O), board.positions[1][2]);
         assert_eq!(Some(Player::O), board.positions[2][1]);
     }
+
+    #[test]
+    #[should_panic(expected = "Position [1,2] is already occupied!")]
+    fn test_overwrite_position() {
+        let mut board = Board::new();
+
+        board.add_move(Player::X, Position::new(1, 2));
+        board.add_move(Player::O, Position::new(1, 2));
+    }
+
 }
