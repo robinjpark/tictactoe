@@ -64,11 +64,15 @@ impl Board {
                 turn_number: 1 } // Starts at 1, not 0!
     }
 
+    #[allow(dead_code)]
+    fn check_invariants(&self) {
+        let _winner = self.get_game_result();
+        if self.turn_number == 0 || self.turn_number > 10 {
+            panic!("Invalid turn number {}!", self.turn_number);
+        }
+    }
+
     #[cfg(test)]
-    // TODO: Is it necessary to check for more illegal strings?
-    // For example:
-    // - multiple winners
-    // Probably not, as this is only meant for use in unit testing.
     fn from_string(contents: &str) -> Board {
         if contents.len() != 9 {
             panic!("Invalid string length {} for board: '{}'", contents.len(), contents);
@@ -82,21 +86,24 @@ impl Board {
 
         let blank_count = contents.chars().filter(|the_char| *the_char == '-').collect::<Vec<char>>().len();
         let mut chars = contents.chars();
-            Board { positions: [[Player::from_char(chars.next().unwrap()),
-                             Player::from_char(chars.next().unwrap()),
-                             Player::from_char(chars.next().unwrap())],
-                            [Player::from_char(chars.next().unwrap()),
-                             Player::from_char(chars.next().unwrap()),
-                             Player::from_char(chars.next().unwrap())],
-                            [Player::from_char(chars.next().unwrap()),
-                             Player::from_char(chars.next().unwrap()),
-                             Player::from_char(chars.next().unwrap())]],
-                    turn_number: 9 - blank_count as u8 + 1
-            }
+        let board = Board { positions: [[Player::from_char(chars.next().unwrap()),
+                                         Player::from_char(chars.next().unwrap()),
+                                         Player::from_char(chars.next().unwrap())],
+                                        [Player::from_char(chars.next().unwrap()),
+                                         Player::from_char(chars.next().unwrap()),
+                                         Player::from_char(chars.next().unwrap())],
+                                        [Player::from_char(chars.next().unwrap()),
+                                         Player::from_char(chars.next().unwrap()),
+                                         Player::from_char(chars.next().unwrap())]],
+                            turn_number: 9 - blank_count as u8 + 1
+        };
+        board.check_invariants();
+        board
     }
 
     #[allow(dead_code)]
     fn add_move(&mut self, player: Player, at: Position) {
+        self.check_invariants();
         if player == Player::X && self.turn_number % 2 == 0 {
             panic!("It is not X's turn!");
         }
@@ -108,15 +115,20 @@ impl Board {
         }
         self.positions[at.row as usize][at.column as usize] = Some(player);
         self.turn_number += 1;
+        self.check_invariants();
     }
 
     #[allow(dead_code)]
-    fn get_game_result(self) -> GameResult {
+    fn get_game_result(&self) -> GameResult {
+        let mut result = None;
         for row in 0..3 {
             if let Some(player) = self.positions[row][0] {
                 if self.positions[row][1] == Some(player) &&
                    self.positions[row][2] == Some(player) {
-                       return GameResult::Win(player);
+                       if result != None && result != Some(GameResult::Win(player)) {
+                           panic!("Game cannot have multiple winners!");
+                       }
+                       result = Some(GameResult::Win(player));
                 }
             }
         }
@@ -125,7 +137,10 @@ impl Board {
             if let Some(player) = self.positions[0][column] {
                 if self.positions[1][column] == Some(player) &&
                    self.positions[2][column] == Some(player) {
-                       return GameResult::Win(player);
+                       if result != None && result != Some(GameResult::Win(player)) {
+                           panic!("Game cannot have multiple winners!");
+                       }
+                       result = Some(GameResult::Win(player));
                 }
             }
         }
@@ -134,7 +149,7 @@ impl Board {
         if let Some(player) = self.positions[0][0] {
             if self.positions[1][1] == Some(player) &&
                self.positions[2][2] == Some(player) {
-                   return GameResult::Win(player);
+                   result = Some(GameResult::Win(player));
             }
         }
 
@@ -142,11 +157,13 @@ impl Board {
         if let Some(player) = self.positions[2][0] {
             if self.positions[1][1] == Some(player) &&
                self.positions[0][2] == Some(player) {
-                   return GameResult::Win(player);
+               result = Some(GameResult::Win(player));
             }
         }
 
-        if self.turn_number <= 9 {
+        if let Some(result) = result {
+            result
+        } else if self.turn_number <= 9 {
             GameResult::InProgress
         } else {
             GameResult::Draw
@@ -307,9 +324,17 @@ mod tests {
     #[test]
     #[should_panic(expected = "Invalid number of Xs and Os")]
     fn test_invalid_board_from_string_bad_ratio() {
-        let _invalid_length_board = Board::from_string("XXX\
-                                                        ---\
-                                                        --O");
+        let _invalid_count_board = Board::from_string("XXX\
+                                                       ---\
+                                                       --O");
+    }
+
+    #[test]
+    #[should_panic(expected = "Game cannot have multiple winners!")]
+    fn test_invalid_board_from_string_multiple_winners() {
+        let _multiple_winners_board = Board::from_string("XXX\
+                                                          OOO\
+                                                          ---");
     }
 
     #[test]
