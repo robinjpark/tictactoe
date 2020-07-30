@@ -57,7 +57,6 @@ impl Board {
 
     #[cfg(test)]
     fn from_string(contents: &str) -> Board {
-        println!("contents are: '{}, length {}'", contents, contents.len());
         if contents.len() != 9 {
             panic!("Invalid string length {} for board: '{}'", contents.len(), contents);
         }
