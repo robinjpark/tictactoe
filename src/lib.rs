@@ -53,6 +53,26 @@ impl Board {
         self.positions[at.row as usize][at.column as usize] = Some(player);
         self.turn_number += 1;
     }
+
+    #[allow(dead_code)]
+    fn get_game_result(self) -> GameResult {
+        if let Some(player) = self.positions[0][0] {
+            if self.positions[0][1] == Some(player) &&
+               self.positions[0][2] == Some(player) {
+                   return GameResult::Win(player)
+            }
+        }
+
+        panic!("Finish me!!!");
+    }
+}
+
+#[allow(dead_code)]
+#[derive(Debug, PartialEq)]
+enum GameResult {
+    Win(Player),
+    Draw,
+    InProgress,
 }
 
 #[cfg(test)]
@@ -155,5 +175,17 @@ mod tests {
 
         board.add_move(Player::X, Position::new(1, 1));
         board.add_move(Player::X, Position::new(2, 2));
+    }
+
+    #[test]
+    fn test_winning_game() {
+        let mut board = Board::new();
+
+        board.add_move(Player::X, Position::new(0, 0));
+        board.add_move(Player::O, Position::new(1, 0));
+        board.add_move(Player::X, Position::new(0, 1));
+        board.add_move(Player::O, Position::new(1, 1));
+        board.add_move(Player::X, Position::new(0, 2));
+        assert_eq!(board.get_game_result(), GameResult::Win(Player::X));
     }
 }
