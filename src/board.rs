@@ -260,7 +260,7 @@ impl std::fmt::Display for Board {
                    None => " ",
                })
     } // fn fmt()
-}
+} // impl std::fmt::Display for Board
 
 #[allow(dead_code)]
 #[derive(Debug, PartialEq)]
@@ -517,4 +517,4 @@ mod tests {
                                         OXO");
         assert_eq!(board.get_game_result(), GameResult::InProgress);
     }
-}
+} // mod tests
