@@ -64,14 +64,6 @@ impl Board {
                 turn_number: 1 } // Starts at 1, not 0!
     }
 
-    #[allow(dead_code)]
-    fn check_invariants(&self) {
-        let _winner = self.get_game_result();
-        if self.turn_number == 0 || self.turn_number > 10 {
-            panic!("Invalid turn number {}!", self.turn_number);
-        }
-    }
-
     #[cfg(test)]
     fn from_string(contents: &str) -> Board {
         if contents.len() != 9 {
@@ -169,7 +161,15 @@ impl Board {
             GameResult::Draw
         }
     }
-}
+
+    #[allow(dead_code)]
+    fn check_invariants(&self) {
+        let _winner = self.get_game_result();
+        if self.turn_number == 0 || self.turn_number > 10 {
+            panic!("Invalid turn number {}!", self.turn_number);
+        }
+    }
+} // impl Board
 
 impl std::fmt::Display for Board {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -225,7 +225,7 @@ impl std::fmt::Display for Board {
                    Some(Player::O) => "O",
                    None => " ",
                })
-    }
+    } // fn fmt()
 }
 
 #[allow(dead_code)]
