@@ -1,5 +1,8 @@
+//! Utilities for manipulating and querying a tic-tac-toe game board.
+
 #[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq)]
+/// Represents the player of the game (X or O).
 enum Player {
     X,
     O,
@@ -7,6 +10,7 @@ enum Player {
 
 impl Player {
     #[allow(dead_code)]
+    #[doc(hidden)]
     fn from_char(value: char) -> Option<Player> {
         if value == 'X' {
             Some(Player::X)
@@ -30,13 +34,21 @@ impl std::fmt::Display for Player {
 }
 
 #[allow(dead_code)]
+/// A position in a tic-tac-toe game board.
 struct Position {
+    /// row number (0 = top, 2 = bottom)
     row: u8,
+    /// column number (0 = left, 2 = right)
     column: u8,
 }
 
 impl Position {
     #[allow(dead_code)]
+    /// Creates a position given the row and column
+    ///
+    /// # Panics
+    ///
+    /// Panics if given row or column is out of range.
     fn new(row: u8, column: u8) -> Position {
         if row > 2 {
             panic!("Invalid row: {}", row);
@@ -50,13 +62,25 @@ impl Position {
 
 #[allow(dead_code)]
 #[derive(PartialEq, Debug)]
+/// Represents a tic-tac-toe game board.
 struct Board {
+    #[doc(hidden)]
     positions: [[Option<Player>; 3]; 3],
+    #[doc(hidden)]
     turn_number: u8,
 }
 
 impl Board {
     #[allow(dead_code)]
+    /// Creates an empty tic-tac-toe game board.
+    ///
+    /// Examples
+    /// ```
+    /// let board = Board::new();
+    /// assert_eq!(board.get_game_result(), GameResult::InProgress);
+    /// ```
+    // TODO: Unforunately, the above example is not checked for correctness!
+    // It has something to do with the crate being a binary, not a library.
     fn new() -> Board {
         Board { positions: [[None, None, None],
                             [None, None, None],
@@ -94,6 +118,14 @@ impl Board {
     }
 
     #[allow(dead_code)]
+    /// Marks the given position as occupied by the given player.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the position is already occupied.
+    ///
+    /// Panics if the given player is playing out of turn.
+    /// Player::X goes first, followed by Player::O, ...
     fn add_move(&mut self, player: Player, at: Position) {
         self.check_invariants();
         if player == Player::X && self.turn_number % 2 == 0 {
@@ -111,6 +143,7 @@ impl Board {
     }
 
     #[allow(dead_code)]
+    /// Gets the result of the current game.
     fn get_game_result(&self) -> GameResult {
         let mut result = None;
         for row in 0..3 {
@@ -163,6 +196,7 @@ impl Board {
     }
 
     #[allow(dead_code)]
+    #[doc(hidden)]
     fn check_invariants(&self) {
         let _winner = self.get_game_result();
         if self.turn_number == 0 || self.turn_number > 10 {
@@ -230,9 +264,13 @@ impl std::fmt::Display for Board {
 
 #[allow(dead_code)]
 #[derive(Debug, PartialEq)]
+/// Indicates the result of a game.
 enum GameResult {
+    /// The given Player has won the game.
     Win(Player),
+    /// The game ended in a draw.
     Draw,
+    /// The game is still in progress.
     InProgress,
 }
 
