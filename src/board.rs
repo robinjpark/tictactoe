@@ -3,7 +3,7 @@
 #[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 /// Represents the player of the game (X or O).
-enum Player {
+pub enum Player {
     X,
     O,
 }
@@ -34,8 +34,9 @@ impl std::fmt::Display for Player {
 }
 
 #[allow(dead_code)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 /// A position in a tic-tac-toe game board.
-struct Position {
+pub struct Position {
     /// row number (0 = top, 2 = bottom)
     row: u8,
     /// column number (0 = left, 2 = right)
@@ -49,7 +50,7 @@ impl Position {
     /// # Panics
     ///
     /// Panics if given row or column is out of range.
-    fn new(row: u8, column: u8) -> Position {
+    pub fn new(row: u8, column: u8) -> Position {
         if row > 2 {
             panic!("Invalid row: {}", row);
         }
@@ -63,7 +64,7 @@ impl Position {
 #[allow(dead_code)]
 #[derive(PartialEq, Debug)]
 /// Represents a tic-tac-toe game board.
-struct Board {
+pub struct Board {
     #[doc(hidden)]
     positions: [[Option<Player>; 3]; 3],
     #[doc(hidden)]
@@ -81,7 +82,7 @@ impl Board {
     /// ```
     // TODO: Unforunately, the above example is not checked for correctness!
     // It has something to do with the crate being a binary, not a library.
-    fn new() -> Board {
+    pub fn new() -> Board {
         Board { positions: [[None, None, None],
                             [None, None, None],
                             [None, None, None]],
@@ -89,7 +90,7 @@ impl Board {
     }
 
     #[cfg(test)]
-    fn from_string(contents: &str) -> Board {
+    pub fn from_string(contents: &str) -> Board {
         if contents.len() != 9 {
             panic!("Invalid string length {} for board: '{}'", contents.len(), contents);
         }
@@ -117,6 +118,19 @@ impl Board {
         board
     }
 
+    /// Returns all of the empty positions in a vector
+    pub fn empty_positions(&self) -> Vec<Position> {
+        let mut vec = Vec::new();
+        for row in 0..3 {
+            for column in 0..3 {
+                if self.positions[row][column] == None {
+                    vec.push(Position::new(row as u8, column as u8));
+                }
+            }
+        }
+        vec
+    }
+
     #[allow(dead_code)]
     /// Marks the given position as occupied by the given player.
     ///
@@ -126,7 +140,7 @@ impl Board {
     ///
     /// Panics if the given player is playing out of turn.
     /// Player::X goes first, followed by Player::O, ...
-    fn add_move(&mut self, player: Player, at: Position) {
+    pub fn add_move(&mut self, player: Player, at: Position) {
         self.check_invariants();
         if player == Player::X && self.turn_number % 2 == 0 {
             panic!("It is not X's turn!");
@@ -144,7 +158,7 @@ impl Board {
 
     #[allow(dead_code)]
     /// Gets the result of the current game.
-    fn get_game_result(&self) -> GameResult {
+    pub fn get_game_result(&self) -> GameResult {
         let mut result = None;
         for row in 0..3 {
             if let Some(player) = self.positions[row][0] {
@@ -265,7 +279,7 @@ impl std::fmt::Display for Board {
 #[allow(dead_code)]
 #[derive(Debug, PartialEq)]
 /// Indicates the result of a game.
-enum GameResult {
+pub enum GameResult {
     /// The given Player has won the game.
     Win(Player),
     /// The game ended in a draw.
@@ -373,6 +387,38 @@ mod tests {
         let _multiple_winners_board = Board::from_string("XXX\
                                                           OOO\
                                                           ---");
+    }
+
+    #[test]
+    fn test_empty_positions_full_board() {
+        let full_board = Board::from_string("XOX\
+                                             OOX\
+                                             XXO");
+        assert_eq!(full_board.empty_positions(), Vec::new());
+    }
+
+    #[test]
+    fn test_empty_positions_one_position_empty() {
+        let one_left = Board::from_string("XOX\
+                                           OO-\
+                                           XXO");
+        assert_eq!(one_left.empty_positions(), vec![Position::new(1,2)]);
+    }
+
+    #[test]
+    fn test_empty_positions_two_positions_empty() {
+        let two_left = Board::from_string("X-X\
+                                           OOX\
+                                           -XO");
+        assert_eq!(two_left.empty_positions(), vec![Position::new(0,1), Position::new(2,0)]);
+    }
+
+    #[test]
+    fn test_empty_positions_empty_board() {
+        let two_left = Board::new();
+        assert_eq!(two_left.empty_positions(), vec![Position::new(0,0), Position::new(0,1), Position::new(0,2),
+                                                    Position::new(1,0), Position::new(1,1), Position::new(1,2),
+                                                    Position::new(2,0), Position::new(2,1), Position::new(2,2)]);
     }
 
     #[test]
