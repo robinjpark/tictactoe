@@ -67,8 +67,29 @@ mod tests {
     fn test_always_draws() {
         let x = OptimalPlayer{};
         let o = OptimalPlayer{};
-        let game = Game::new(&x, &o);
-        assert_eq!(game.result(), GameResult::Draw);
+        const NUM_GAMES: u32 = 10;
+        for _i in 0..NUM_GAMES {
+            let game = Game::new(&x, &o);
+            assert_eq!(game.result(), GameResult::Draw);
+        }
+    }
+
+    #[test]
+    fn test_never_loses() {
+        let x = OptimalPlayer{};
+        let o = RandomPlayer{};
+        const NUM_GAMES: u32 = 10;
+        for _i in 0..NUM_GAMES {
+            let game = Game::new(&x, &o);
+            assert_ne!(game.result(), GameResult::Win(Token::O));
+        }
+
+        let x = RandomPlayer{};
+        let o = OptimalPlayer{};
+        for _i in 0..NUM_GAMES {
+            let game = Game::new(&x, &o);
+            assert_ne!(game.result(), GameResult::Win(Token::X));
+        }
     }
 
     #[test]
