@@ -13,23 +13,23 @@ impl Player for OptimalPlayer {
 impl OptimalPlayer {
     fn get_best_move(&self, board: &Board) -> Position {
         let who_am_i = board.whose_turn();
-        let potential_moves = board.empty_positions();
-        let mut with_results = Vec::<(Position, GameResult)>::new();
 
-        for potential_move in &potential_moves {
+        let mut positions_and_results = Vec::<(Position, GameResult)>::new();
+
+        for potential_move in board.empty_positions() {
             let mut next_board = board.clone();
-            next_board.add_move(who_am_i, *potential_move);
-            with_results.push((*potential_move, next_board.get_game_result()));
+            next_board.add_move(who_am_i, potential_move);
+            positions_and_results.push((potential_move, next_board.get_game_result()));
         }
 
-        for (potential_move, result) in with_results.iter() {
+        for (potential_move, result) in positions_and_results.iter() {
             //assert_ne!(*result, GameResult::InProgress);
             if *result == GameResult::Win(who_am_i) {
                 return *potential_move;
             }
         }
 
-        potential_moves[0]
+        positions_and_results[0].0
     }
 }
 
