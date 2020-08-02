@@ -14,8 +14,10 @@ impl Game {
         let mut turn_number = 1;
         while board.get_game_result() == GameResult::InProgress {
             let token = if turn_number % 2 == 1 { Token::X } else { Token::O };
+            println!("It is {}'s turn", token);
             let their_move = if turn_number % 2 == 1 { x.take_turn(&board) } else { o.take_turn(&board) };
             board.add_move(token, their_move);
+            println!("{}", board);
             turn_number += 1;
         }
 
