@@ -36,15 +36,6 @@ mod tests {
     use crate::strategies::*;
 
     #[test]
-    fn test_game_between_simpletons() {
-        let x = SimpletonPlayer{};
-        let o = SimpletonPlayer{};
-        let game = Game::new(&x, &o);
-        assert_ne!(game.result(), GameResult::InProgress);
-        assert_eq!(game.result(), GameResult::Win(Token::X));
-    }
-
-    #[test]
     fn test_game_between_random_players() {
         const GAME_COUNT:u32 = 1000; // 100 games is enough to make reasonable predictions about outcomes.
 
