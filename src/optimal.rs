@@ -19,7 +19,8 @@ impl OptimalPlayer {
         for potential_move in board.empty_positions() {
             let mut next_board = board.clone();
             next_board.add_move(who_am_i, potential_move);
-            positions_and_results.push((potential_move, next_board.get_game_result()));
+            let result = self.get_eventual_game_result(&next_board);
+            positions_and_results.push((potential_move, result));
         }
 
         for (potential_move, result) in positions_and_results.iter() {
@@ -28,8 +29,26 @@ impl OptimalPlayer {
                 return *potential_move;
             }
         }
+        for (potential_move, result) in positions_and_results.iter() {
+            //assert_ne!(*result, GameResult::InProgress);
+            if *result == GameResult::Draw {
+                return *potential_move;
+            }
+        }
 
         positions_and_results[0].0
+    }
+
+    fn get_eventual_game_result(&self, board: &Board) -> GameResult {
+        let result = board.get_game_result();
+        if result != GameResult::InProgress {
+            result
+        } else {
+            let mut next_board = board.clone();
+            let best_move = self.get_best_move(&next_board);
+            next_board.add_move(next_board.whose_turn(), best_move);
+            self.get_eventual_game_result(&next_board)
+        }
     }
 }
 
@@ -39,7 +58,6 @@ mod tests {
     use crate::game::*;
 
     #[test]
-    #[ignore] // Ignore until it works!!!
     fn test_always_draws() {
         let x = OptimalPlayer{};
         let o = OptimalPlayer{};
@@ -59,20 +77,21 @@ mod tests {
     #[test]
     fn test_winning_move() {
         let player = OptimalPlayer{};
+
+        println!("Scenario #1");
         let board = Board::from_string("XO-\
                                         OO-\
                                         XX-");
-        assert_eq!(player.take_turn(&board), Position::new(2,2));
+        assert_eq!(player.take_turn(&board), Position::new(2,2), "Scenario #1 failed");
 
-        let player = OptimalPlayer{};
+        println!("Scenario #1");
         let board = Board::from_string("XOX\
                                         OO-\
                                         XX-");
-        assert_eq!(player.take_turn(&board), Position::new(1,2));
+        assert_eq!(player.take_turn(&board), Position::new(1,2), "Scenario #2 failed");
     }
 
     #[test]
-    #[ignore]
     fn test_prevent_loss() {
         let player = OptimalPlayer{};
         let board = Board::from_string("XOO\

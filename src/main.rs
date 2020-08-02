@@ -9,12 +9,12 @@ mod optimal;
 mod human;
 
 use crate::game::*;
-use crate::strategies::*;
 use crate::human::*;
+use crate::optimal::*;
 
 fn main() {
     let x = HumanPlayer{};
-    let o = RandomPlayer{};
+    let o = OptimalPlayer{};
     let game = Game::new(&x, &o);
     println! ("Result {:?}", game.result());
 }
