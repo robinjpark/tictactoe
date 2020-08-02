@@ -1,4 +1,5 @@
 use crate::board::*;
+use crate::strategies::Player;
 
 #[allow(dead_code)]
 /// Game represents a single game played between two players
@@ -9,15 +10,14 @@ struct Game {
 impl Game {
     #[allow(dead_code)]
     /// Creates and plays a game between two players, given their strategies.
-    pub fn new(strategy_x: fn (&Board) -> Position, strategy_o: fn (&Board) -> Position) -> Game {
+    pub fn new(x: &impl Player, o: &impl Player) -> Game {
         let mut board = Board::new();
 
         let mut turn_number = 1;
         while board.get_game_result() == GameResult::InProgress {
-            let player = if turn_number % 2 == 1 { Token::X } else { Token::O };
-            let their_strategy = if turn_number % 2 == 1 { strategy_x } else { strategy_o };
-            let their_move = their_strategy(&board);
-            board.add_move(player, their_move);
+            let token = if turn_number % 2 == 1 { Token::X } else { Token::O };
+            let their_move = if turn_number % 2 == 1 { x.take_turn(&board) } else { o.take_turn(&board) };
+            board.add_move(token, their_move);
             turn_number += 1;
         }
 
@@ -38,7 +38,9 @@ mod tests {
 
     #[test]
     fn test_game_between_simpletons() {
-        let game = Game::new(simpleton_player::take_turn, simpleton_player::take_turn);
+        let x = SimpletonPlayer{};
+        let o = SimpletonPlayer{};
+        let game = Game::new(&x, &o);
         assert_ne!(game.result(), GameResult::InProgress);
         assert_eq!(game.result(), GameResult::Win(Token::X));
     }
@@ -52,7 +54,9 @@ mod tests {
         let mut o_win_count = 0;
         println! ("Simulating {} games between players who play randomly.", GAME_COUNT);
         for _i in 1..GAME_COUNT+1 {
-            let game = Game::new(random_player::take_turn, random_player::take_turn);
+            let x = RandomPlayer{};
+            let o = RandomPlayer{};
+            let game = Game::new(&x, &o);
             match game.result() {
                 GameResult::Draw => draw_count += 1,
                 GameResult::Win(Token::X) => x_win_count += 1,
