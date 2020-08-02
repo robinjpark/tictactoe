@@ -58,7 +58,7 @@ impl Position {
     }
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Copy, Clone)]
 /// Represents a tic-tac-toe game board.
 pub struct Board {
     #[doc(hidden)]
@@ -126,12 +126,21 @@ impl Board {
         vec
     }
 
+    // TODO: Rename!  This does not ask "is the board empty?"
     pub fn is_empty(&self, position: Position) -> bool {
         if self.positions[position.row as usize][position.column as usize] == None {
             true
         }
         else {
             false
+        }
+    }
+
+    pub fn whose_turn(&self) -> Token {
+        if self.turn_number % 2 == 1 {
+            Token::X
+        } else {
+            Token::O
         }
     }
 
@@ -289,7 +298,7 @@ pub enum GameResult {
 }
 
 #[cfg(test)]
-mod tests {
+mod player_tests {
     use super::*;
 
     #[test]
@@ -309,6 +318,11 @@ mod tests {
         assert_eq!(format!("{}", o), "O");
         assert_eq!(format!("{}{}", x, o), "XO");
     }
+} // mod player_tests
+
+#[cfg(test)]
+mod position_tests {
+    use super::*;
 
     #[test]
     fn test_position_ctor_success() {
@@ -330,7 +344,11 @@ mod tests {
     fn test_position_ctor_invalid_column() {
         let _position = Position::new(0, 3);
     }
+} // mod position_tests
 
+#[cfg(test)]
+mod board_tests {
+    use super::*;
     #[test]
     fn test_empty_board() {
         let empty = Board::new();
@@ -427,6 +445,14 @@ mod tests {
         assert_eq!(two_left.empty_positions(), vec![Position::new(0,0), Position::new(0,1), Position::new(0,2),
                                                     Position::new(1,0), Position::new(1,1), Position::new(1,2),
                                                     Position::new(2,0), Position::new(2,1), Position::new(2,2)]);
+    }
+
+    #[test]
+    fn test_whose_turn() {
+        let mut board = Board::new();
+        assert_eq!(board.whose_turn(), Token::X);
+        board.add_move(Token::X, Position::new(0,0));
+        assert_eq!(board.whose_turn(), Token::O);
     }
 
     #[test]
@@ -571,4 +597,4 @@ mod tests {
                                         OXO");
         assert_eq!(board.get_game_result(), GameResult::InProgress);
     }
-} // mod tests
+} // mod board_tests
