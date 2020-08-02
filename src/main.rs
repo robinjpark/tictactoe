@@ -5,6 +5,7 @@ extern crate more_asserts;
 mod board;
 mod strategies;
 mod game;
+mod optimal;
 
 use crate::game::*;
 use crate::strategies::*;
