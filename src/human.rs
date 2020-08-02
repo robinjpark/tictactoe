@@ -29,7 +29,11 @@ impl Player for HumanPlayer {
                 }
             };
 
-            return position;
+            if board.is_empty(position) {
+                return position;
+            } else {
+                println!("That position is already occupied!");
+            }
         }
     }
 }
