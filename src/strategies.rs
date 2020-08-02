@@ -1,13 +1,16 @@
 use crate::board::{Position, Board};
+#[cfg(test)]
 use rand::Rng;
 
 pub trait Player {
     fn take_turn (&self, board: &Board) -> Position;
 }
 
+#[cfg(test)]
 pub struct RandomPlayer {
 }
 
+#[cfg(test)]
 impl Player for RandomPlayer {
     fn take_turn (&self, board: &Board) -> Position
     {
