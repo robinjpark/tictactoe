@@ -13,8 +13,11 @@ use crate::strategies::*;
 use crate::human::*;
 
 fn main() {
-    let x = HumanPlayer{};
-    let o = RandomPlayer{};
-    let game = Game::new(&x, &o);
+    let stdio = std::io::stdin();
+    let input = stdio.lock();
+    let output = std::io::stdout();
+    let mut x = HumanPlayer { reader: input, writer: output };
+    let mut o = RandomPlayer{};
+    let game = Game::new(&mut x, &mut o);
     println! ("Result {:?}", game.result());
 }

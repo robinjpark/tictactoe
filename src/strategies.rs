@@ -4,7 +4,7 @@ use crate::board::{Position, Board};
 use rand::Rng;
 
 pub trait Player {
-    fn take_turn (&self, board: &Board) -> Position;
+    fn take_turn (&mut self, board: &Board) -> Position;
 }
 
 /// A SimpletonPlayer is one who simply plays in the first
@@ -13,7 +13,7 @@ pub struct SimpletonPlayer {
 }
 
 impl Player for SimpletonPlayer {
-    fn take_turn (&self, board: &Board) -> Position
+    fn take_turn (&mut self, board: &Board) -> Position
     {
         let empty_positions = board.empty_positions();
         empty_positions[0]
@@ -77,7 +77,7 @@ pub struct RandomPlayer {
 }
 
 impl Player for RandomPlayer {
-    fn take_turn (&self, board: &Board) -> Position
+    fn take_turn (&mut self, board: &Board) -> Position
     {
         let mut rng = rand::thread_rng();
 

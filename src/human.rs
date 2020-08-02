@@ -1,17 +1,24 @@
 use crate::board::*;
 use crate::strategies::*;
-use std::io;
+use std::io::{self, BufRead, Write};
 
-pub struct HumanPlayer {
+// TODO: Make reader and writer private, initialize them with a ctor fn
+pub struct HumanPlayer<R,W> {
+    pub reader: R,
+    pub writer: W
 }
 
-impl Player for HumanPlayer {
-    fn take_turn(&self, board: &Board) -> Position {
-        println!("{}", board);
+impl<R,W> Player for HumanPlayer<R,W>
+where
+    R: BufRead,
+    W: Write,
+{
+    fn take_turn(&mut self, board: &Board) -> Position {
+        writeln!(&mut self.writer, "{}", board);
         loop {
-            println!("Where would you like to go? (1-9)");
+            writeln!(&mut self.writer, "Where would you like to go? (1-9)");
             let mut input = String::new();
-            io::stdin().read_line(&mut input).expect("error getting input");
+            self.reader.read_line(&mut input).expect("error getting input");
             let input = input.trim();
             let position = match input {
                 "1" => Position::new(0,0),
@@ -24,7 +31,7 @@ impl Player for HumanPlayer {
                 "8" => Position::new(2,1),
                 "9" => Position::new(2,2),
                 &_ => {
-                    println!("That is not a valid position!");
+                    writeln!(&mut self.writer, "That is not a valid position!");
                     continue;
                 }
             };
@@ -32,7 +39,7 @@ impl Player for HumanPlayer {
             if board.is_empty(position) {
                 return position;
             } else {
-                println!("That position is already occupied!");
+                writeln!(&mut self.writer, "That position is already occupied!");
             }
         }
     }
