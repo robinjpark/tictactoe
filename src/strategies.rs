@@ -1,6 +1,6 @@
 /// A simpleton_player is one who always picks the first empty location
 /// It isn't useful for much, other than testing the game logic.
-use crate::board::{Position, Board, GameResult, Player};
+use crate::board::{Position, Board, GameResult, Token};
 
 pub mod simpleton_player {
 
@@ -51,13 +51,13 @@ mod tests {
             let position = take_turn(&board);
             let player =
                 if turn % 2 == 1 {
-                    Player::X
+                    Token::X
                 } else {
-                    Player::O
+                    Token::O
                 };
             board.add_move(player, position);
         }
-        assert_eq!(board.get_game_result(), GameResult::Win(Player::X));
+        assert_eq!(board.get_game_result(), GameResult::Win(Token::X));
     }
 }
 
@@ -97,9 +97,9 @@ mod tests {
                 let position = take_turn(&board);
                 let player =
                     if turn % 2 == 1 {
-                        Player::X
+                        Token::X
                     } else {
-                        Player::O
+                        Token::O
                     };
                 board.add_move(player, position);
                 if let GameResult::Win(_winner) = board.get_game_result() {

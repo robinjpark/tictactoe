@@ -3,19 +3,19 @@
 #[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 /// Represents the player of the game (X or O).
-pub enum Player {
+pub enum Token {
     X,
     O,
 }
 
-impl Player {
+impl Token {
     #[allow(dead_code)]
     #[doc(hidden)]
-    fn from_char(value: char) -> Option<Player> {
+    fn from_char(value: char) -> Option<Token> {
         if value == 'X' {
-            Some(Player::X)
+            Some(Token::X)
         } else if value == 'O' {
-            Some(Player::O)
+            Some(Token::O)
         } else if value == '-' {
             None
         } else {
@@ -24,11 +24,11 @@ impl Player {
     }
 }
 
-impl std::fmt::Display for Player {
+impl std::fmt::Display for Token {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match *self {
-            Player::X => write!(f, "X"),
-            Player::O => write!(f, "O"),
+            Token::X => write!(f, "X"),
+            Token::O => write!(f, "O"),
         }
     }
 }
@@ -66,7 +66,7 @@ impl Position {
 /// Represents a tic-tac-toe game board.
 pub struct Board {
     #[doc(hidden)]
-    positions: [[Option<Player>; 3]; 3],
+    positions: [[Option<Token>; 3]; 3],
     #[doc(hidden)]
     turn_number: u8,
 }
@@ -103,15 +103,15 @@ impl Board {
 
         let blank_count = contents.chars().filter(|the_char| *the_char == '-').collect::<Vec<char>>().len();
         let mut chars = contents.chars();
-        let board = Board { positions: [[Player::from_char(chars.next().unwrap()),
-                                         Player::from_char(chars.next().unwrap()),
-                                         Player::from_char(chars.next().unwrap())],
-                                        [Player::from_char(chars.next().unwrap()),
-                                         Player::from_char(chars.next().unwrap()),
-                                         Player::from_char(chars.next().unwrap())],
-                                        [Player::from_char(chars.next().unwrap()),
-                                         Player::from_char(chars.next().unwrap()),
-                                         Player::from_char(chars.next().unwrap())]],
+        let board = Board { positions: [[Token::from_char(chars.next().unwrap()),
+                                         Token::from_char(chars.next().unwrap()),
+                                         Token::from_char(chars.next().unwrap())],
+                                        [Token::from_char(chars.next().unwrap()),
+                                         Token::from_char(chars.next().unwrap()),
+                                         Token::from_char(chars.next().unwrap())],
+                                        [Token::from_char(chars.next().unwrap()),
+                                         Token::from_char(chars.next().unwrap()),
+                                         Token::from_char(chars.next().unwrap())]],
                             turn_number: 9 - blank_count as u8 + 1
         };
         board.check_invariants();
@@ -139,13 +139,13 @@ impl Board {
     /// Panics if the position is already occupied.
     ///
     /// Panics if the given player is playing out of turn.
-    /// Player::X goes first, followed by Player::O, ...
-    pub fn add_move(&mut self, player: Player, at: Position) {
+    /// Token::X goes first, followed by Token::O, ...
+    pub fn add_move(&mut self, player: Token, at: Position) {
         self.check_invariants();
-        if player == Player::X && self.turn_number % 2 == 0 {
+        if player == Token::X && self.turn_number % 2 == 0 {
             panic!("It is not X's turn!");
         }
-        if player == Player::O && self.turn_number % 2 == 1 {
+        if player == Token::O && self.turn_number % 2 == 1 {
             panic!("It is not O's turn!");
         }
         if let Some(_player) = self.positions[at.row as usize][at.column as usize] {
@@ -229,48 +229,48 @@ impl std::fmt::Display for Board {
         // =====
         write!(f, "=====\n|{}{}{}|\n|{}{}{}|\n|{}{}{}|\n=====",
                match self.positions[0][0] {
-                   Some(Player::X) => "X",
-                   Some(Player::O) => "O",
+                   Some(Token::X) => "X",
+                   Some(Token::O) => "O",
                    None => " ",
                },
                match self.positions[0][1] {
-                   Some(Player::X) => "X",
-                   Some(Player::O) => "O",
+                   Some(Token::X) => "X",
+                   Some(Token::O) => "O",
                    None => " ",
                },
                match self.positions[0][2] {
-                   Some(Player::X) => "X",
-                   Some(Player::O) => "O",
+                   Some(Token::X) => "X",
+                   Some(Token::O) => "O",
                    None => " ",
                },
                match self.positions[1][0] {
-                   Some(Player::X) => "X",
-                   Some(Player::O) => "O",
+                   Some(Token::X) => "X",
+                   Some(Token::O) => "O",
                    None => " ",
                },
                match self.positions[1][1] {
-                   Some(Player::X) => "X",
-                   Some(Player::O) => "O",
+                   Some(Token::X) => "X",
+                   Some(Token::O) => "O",
                    None => " ",
                },
                match self.positions[1][2] {
-                   Some(Player::X) => "X",
-                   Some(Player::O) => "O",
+                   Some(Token::X) => "X",
+                   Some(Token::O) => "O",
                    None => " ",
                },
                match self.positions[2][0] {
-                   Some(Player::X) => "X",
-                   Some(Player::O) => "O",
+                   Some(Token::X) => "X",
+                   Some(Token::O) => "O",
                    None => " ",
                },
                match self.positions[2][1] {
-                   Some(Player::X) => "X",
-                   Some(Player::O) => "O",
+                   Some(Token::X) => "X",
+                   Some(Token::O) => "O",
                    None => " ",
                },
                match self.positions[2][2] {
-                   Some(Player::X) => "X",
-                   Some(Player::O) => "O",
+                   Some(Token::X) => "X",
+                   Some(Token::O) => "O",
                    None => " ",
                })
     } // fn fmt()
@@ -280,8 +280,8 @@ impl std::fmt::Display for Board {
 #[derive(Debug, PartialEq)]
 /// Indicates the result of a game.
 pub enum GameResult {
-    /// The given Player has won the game.
-    Win(Player),
+    /// The given Token has won the game.
+    Win(Token),
     /// The game ended in a draw.
     Draw,
     /// The game is still in progress.
@@ -294,17 +294,17 @@ mod tests {
 
     #[test]
     fn test_player_equality() {
-        let player1 = Player::X;
-        let player2 = Player::O;
-        let player3 = Player::X;
+        let player1 = Token::X;
+        let player2 = Token::O;
+        let player3 = Token::X;
         assert_ne!(player1, player2);
         assert_eq!(player1, player3);
     }
 
     #[test]
     fn test_player_display() {
-        let x = Player::X;
-        let o = Player::O;
+        let x = Token::X;
+        let o = Token::O;
         assert_eq!(format!("{}", x), "X");
         assert_eq!(format!("{}", o), "O");
         assert_eq!(format!("{}{}", x, o), "XO");
@@ -346,7 +346,7 @@ mod tests {
         let full_board = Board::from_string("XOX\
                                              OXO\
                                              XOX");
-        assert_eq!(Some(Player::X), full_board.positions[0][0]);
+        assert_eq!(Some(Token::X), full_board.positions[0][0]);
         assert_eq!(10, full_board.turn_number);
 
         let empty_board = Board::from_string("---\
@@ -425,31 +425,31 @@ mod tests {
     fn test_add_to_board() {
         let mut board = Board::new();
 
-        board.add_move(Player::X, Position::new(0, 0));
-        assert_eq!(Some(Player::X), board.positions[0][0]);
+        board.add_move(Token::X, Position::new(0, 0));
+        assert_eq!(Some(Token::X), board.positions[0][0]);
         assert_eq!(2, board.turn_number);
 
-        board.add_move(Player::O, Position::new(1, 1));
-        assert_eq!(Some(Player::O), board.positions[1][1]);
+        board.add_move(Token::O, Position::new(1, 1));
+        assert_eq!(Some(Token::O), board.positions[1][1]);
         assert_eq!(3, board.turn_number);
 
-        board.add_move(Player::X, Position::new(0, 1));
-        board.add_move(Player::O, Position::new(0, 2));
-        board.add_move(Player::X, Position::new(1, 0));
-        board.add_move(Player::O, Position::new(1, 2));
-        board.add_move(Player::X, Position::new(2, 0));
-        board.add_move(Player::O, Position::new(2, 1));
+        board.add_move(Token::X, Position::new(0, 1));
+        board.add_move(Token::O, Position::new(0, 2));
+        board.add_move(Token::X, Position::new(1, 0));
+        board.add_move(Token::O, Position::new(1, 2));
+        board.add_move(Token::X, Position::new(2, 0));
+        board.add_move(Token::O, Position::new(2, 1));
         assert_eq!(9, board.turn_number);
-        board.add_move(Player::X, Position::new(2, 2));
+        board.add_move(Token::X, Position::new(2, 2));
 
-        assert_eq!(Some(Player::X), board.positions[0][1]);
-        assert_eq!(Some(Player::X), board.positions[1][0]);
-        assert_eq!(Some(Player::X), board.positions[2][0]);
-        assert_eq!(Some(Player::X), board.positions[2][2]);
+        assert_eq!(Some(Token::X), board.positions[0][1]);
+        assert_eq!(Some(Token::X), board.positions[1][0]);
+        assert_eq!(Some(Token::X), board.positions[2][0]);
+        assert_eq!(Some(Token::X), board.positions[2][2]);
 
-        assert_eq!(Some(Player::O), board.positions[0][2]);
-        assert_eq!(Some(Player::O), board.positions[1][2]);
-        assert_eq!(Some(Player::O), board.positions[2][1]);
+        assert_eq!(Some(Token::O), board.positions[0][2]);
+        assert_eq!(Some(Token::O), board.positions[1][2]);
+        assert_eq!(Some(Token::O), board.positions[2][1]);
 
     }
 
@@ -458,8 +458,8 @@ mod tests {
     fn test_overwrite_position() {
         let mut board = Board::new();
 
-        board.add_move(Player::X, Position::new(1, 2));
-        board.add_move(Player::O, Position::new(1, 2));
+        board.add_move(Token::X, Position::new(1, 2));
+        board.add_move(Token::O, Position::new(1, 2));
     }
 
     #[test]
@@ -467,7 +467,7 @@ mod tests {
     fn test_wrong_starting_player() {
         let mut board = Board::new();
 
-        board.add_move(Player::O, Position::new(1, 1));
+        board.add_move(Token::O, Position::new(1, 1));
     }
 
     #[test]
@@ -475,8 +475,8 @@ mod tests {
     fn test_wrong_players_turn() {
         let mut board = Board::new();
 
-        board.add_move(Player::X, Position::new(1, 1));
-        board.add_move(Player::X, Position::new(2, 2));
+        board.add_move(Token::X, Position::new(1, 1));
+        board.add_move(Token::X, Position::new(2, 2));
     }
 
     #[test]
@@ -497,52 +497,52 @@ mod tests {
     fn test_winning_game() {
         let mut board = Board::new();
 
-        board.add_move(Player::X, Position::new(0, 0));
-        board.add_move(Player::O, Position::new(1, 0));
-        board.add_move(Player::X, Position::new(0, 1));
-        board.add_move(Player::O, Position::new(1, 1));
-        board.add_move(Player::X, Position::new(0, 2));
-        assert_eq!(board.get_game_result(), GameResult::Win(Player::X));
+        board.add_move(Token::X, Position::new(0, 0));
+        board.add_move(Token::O, Position::new(1, 0));
+        board.add_move(Token::X, Position::new(0, 1));
+        board.add_move(Token::O, Position::new(1, 1));
+        board.add_move(Token::X, Position::new(0, 2));
+        assert_eq!(board.get_game_result(), GameResult::Win(Token::X));
 
         let board = Board::from_string("XXX\
                                         OO-\
                                         ---");
-        assert_eq!(board.get_game_result(), GameResult::Win(Player::X));
+        assert_eq!(board.get_game_result(), GameResult::Win(Token::X));
 
         let board = Board::from_string("XX-\
                                         OOO\
                                         X--");
-        assert_eq!(board.get_game_result(), GameResult::Win(Player::O));
+        assert_eq!(board.get_game_result(), GameResult::Win(Token::O));
 
         let board = Board::from_string("XX-\
                                         X--\
                                         OOO");
-        assert_eq!(board.get_game_result(), GameResult::Win(Player::O));
+        assert_eq!(board.get_game_result(), GameResult::Win(Token::O));
 
         let board = Board::from_string("XO-\
                                         XO-\
                                         X--");
-        assert_eq!(board.get_game_result(), GameResult::Win(Player::X));
+        assert_eq!(board.get_game_result(), GameResult::Win(Token::X));
 
         let board = Board::from_string("XO-\
                                         -O-\
                                         XOX");
-        assert_eq!(board.get_game_result(), GameResult::Win(Player::O));
+        assert_eq!(board.get_game_result(), GameResult::Win(Token::O));
 
         let board = Board::from_string("-OX\
                                         --X\
                                         -OX");
-        assert_eq!(board.get_game_result(), GameResult::Win(Player::X));
+        assert_eq!(board.get_game_result(), GameResult::Win(Token::X));
 
         let board = Board::from_string("X-O\
                                         -X-\
                                         O-X");
-        assert_eq!(board.get_game_result(), GameResult::Win(Player::X));
+        assert_eq!(board.get_game_result(), GameResult::Win(Token::X));
 
         let board = Board::from_string("X-O\
                                         XO-\
                                         O-X");
-        assert_eq!(board.get_game_result(), GameResult::Win(Player::O));
+        assert_eq!(board.get_game_result(), GameResult::Win(Token::O));
     } // test_winning_game()
 
     #[test]

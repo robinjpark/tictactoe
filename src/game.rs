@@ -13,7 +13,7 @@ impl Game {
 
         let mut turn_number = 1;
         while board.get_game_result() == GameResult::InProgress {
-            let player = if turn_number % 2 == 1 { Player::X } else { Player::O };
+            let player = if turn_number % 2 == 1 { Token::X } else { Token::O };
             let their_strategy = if turn_number % 2 == 1 { strategy_x } else { strategy_o };
             let their_move = their_strategy(&board);
             board.add_move(player, their_move);
@@ -37,7 +37,7 @@ mod tests {
     fn test_game_between_simpletons() {
         let game = Game::new(simpleton_player::take_turn, simpleton_player::take_turn);
         assert_ne!(game.result(), GameResult::InProgress);
-        assert_eq!(game.result(), GameResult::Win(Player::X));
+        assert_eq!(game.result(), GameResult::Win(Token::X));
     }
 
     #[test]
@@ -52,8 +52,8 @@ mod tests {
             let game = Game::new(random_player::take_turn, random_player::take_turn);
             match game.result() {
                 GameResult::Draw => draw_count += 1,
-                GameResult::Win(Player::X) => x_win_count += 1,
-                GameResult::Win(Player::O) => o_win_count += 1,
+                GameResult::Win(Token::X) => x_win_count += 1,
+                GameResult::Win(Token::O) => o_win_count += 1,
                 GameResult::InProgress => panic!("game should not be still in progress!"),
             }
         }
