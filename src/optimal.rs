@@ -5,7 +5,7 @@ pub struct OptimalPlayer {
 }
 
 impl Player for OptimalPlayer {
-    fn take_turn(&mut self, board: &Board) -> Position {
+    fn take_turn(&self, board: &Board) -> Position {
         board.empty_positions()[0]
     }
 }
