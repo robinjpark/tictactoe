@@ -1,6 +1,5 @@
 //! Utilities for manipulating and querying a tic-tac-toe game board.
 
-#[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 /// Represents the player of the game (X or O).
 pub enum Token {
@@ -33,7 +32,6 @@ impl std::fmt::Display for Token {
     }
 }
 
-#[allow(dead_code)]
 #[derive(Copy, Clone, Debug, PartialEq)]
 /// A position in a tic-tac-toe game board.
 pub struct Position {
@@ -44,7 +42,6 @@ pub struct Position {
 }
 
 impl Position {
-    #[allow(dead_code)]
     /// Creates a position given the row and column
     ///
     /// # Panics
@@ -61,7 +58,6 @@ impl Position {
     }
 }
 
-#[allow(dead_code)]
 #[derive(PartialEq, Debug)]
 /// Represents a tic-tac-toe game board.
 pub struct Board {
@@ -72,7 +68,6 @@ pub struct Board {
 }
 
 impl Board {
-    #[allow(dead_code)]
     /// Creates an empty tic-tac-toe game board.
     ///
     /// Examples
@@ -131,7 +126,6 @@ impl Board {
         vec
     }
 
-    #[allow(dead_code)]
     /// Marks the given position as occupied by the given player.
     ///
     /// # Panics
@@ -156,7 +150,6 @@ impl Board {
         self.check_invariants();
     }
 
-    #[allow(dead_code)]
     /// Gets the result of the current game.
     pub fn get_game_result(&self) -> GameResult {
         let mut result = None;
@@ -209,7 +202,6 @@ impl Board {
         }
     }
 
-    #[allow(dead_code)]
     #[doc(hidden)]
     fn check_invariants(&self) {
         let _winner = self.get_game_result();
@@ -276,7 +268,6 @@ impl std::fmt::Display for Board {
     } // fn fmt()
 } // impl std::fmt::Display for Board
 
-#[allow(dead_code)]
 #[derive(Debug, PartialEq)]
 /// Indicates the result of a game.
 pub enum GameResult {

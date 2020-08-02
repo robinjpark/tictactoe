@@ -13,7 +13,6 @@ pub struct SimpletonPlayer {
 }
 
 impl Player for SimpletonPlayer {
-    #[allow(dead_code)]
     fn take_turn (&self, board: &Board) -> Position
     {
         let empty_positions = board.empty_positions();
@@ -78,7 +77,6 @@ pub struct RandomPlayer {
 }
 
 impl Player for RandomPlayer {
-    #[allow(dead_code)]
     fn take_turn (&self, board: &Board) -> Position
     {
         let mut rng = rand::thread_rng();

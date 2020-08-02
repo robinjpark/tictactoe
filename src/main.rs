@@ -6,6 +6,12 @@ mod board;
 mod strategies;
 mod game;
 
+use crate::game::*;
+use crate::strategies::*;
+
 fn main() {
-    panic!("Write me!");
+    let x = RandomPlayer{};
+    let o = RandomPlayer{};
+    let game = Game::new(&x, &o);
+    println! ("Result {:?}", game.result());
 }

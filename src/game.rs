@@ -1,14 +1,12 @@
 use crate::board::*;
 use crate::strategies::Player;
 
-#[allow(dead_code)]
 /// Game represents a single game played between two players
-struct Game {
+pub struct Game {
     board: Board,
 }
 
 impl Game {
-    #[allow(dead_code)]
     /// Creates and plays a game between two players, given their strategies.
     pub fn new(x: &impl Player, o: &impl Player) -> Game {
         let mut board = Board::new();
@@ -24,7 +22,6 @@ impl Game {
         Game { board }
     }
 
-    #[allow(dead_code)]
     /// Returns the result of the game
     pub fn result(&self) -> GameResult {
         self.board.get_game_result()
