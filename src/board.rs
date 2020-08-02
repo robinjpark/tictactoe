@@ -128,12 +128,7 @@ impl Board {
 
     // TODO: Rename!  This does not ask "is the board empty?"
     pub fn is_empty(&self, position: Position) -> bool {
-        if self.positions[position.row as usize][position.column as usize] == None {
-            true
-        }
-        else {
-            false
-        }
+        self.positions[position.row as usize][position.column as usize] == None
     }
 
     pub fn whose_turn(&self) -> Token {

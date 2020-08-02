@@ -23,7 +23,7 @@ impl OptimalPlayer {
         let mut positions_and_results = Vec::<(Position, GameResult)>::new();
 
         for potential_move in board.empty_positions() {
-            let mut next_board = board.clone();
+            let mut next_board = *board;
             next_board.add_move(who_am_i, potential_move);
             let result = self.get_eventual_game_result(&next_board);
             positions_and_results.push((potential_move, result));
@@ -50,7 +50,7 @@ impl OptimalPlayer {
         if result != GameResult::InProgress {
             result
         } else {
-            let mut next_board = board.clone();
+            let mut next_board = *board;
             let best_move = self.get_best_move(&next_board);
             next_board.add_move(next_board.whose_turn(), best_move);
             self.get_eventual_game_result(&next_board)
