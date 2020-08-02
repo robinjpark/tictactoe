@@ -8,7 +8,7 @@ pub enum Token {
 }
 
 impl Token {
-    #[allow(dead_code)]
+    #[cfg(test)]
     #[doc(hidden)]
     fn from_char(value: char) -> Option<Token> {
         if value == 'X' {
