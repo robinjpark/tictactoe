@@ -1,6 +1,6 @@
 /// A simpleton_player is one who always picks the first empty location
 /// It isn't useful for much, other than testing the game logic.
-use crate::board::{Position, Board, GameResult, Token};
+use crate::board::{Position, Board};
 
 pub mod simpleton_player {
 
@@ -16,6 +16,7 @@ pub fn take_turn (board: &Board) -> Position
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::board::{GameResult, Token};
 
     #[test]
     fn test_empty_board() {
@@ -66,7 +67,9 @@ mod tests {
 pub mod random_player {
 
 use rand::Rng;
+use super::*;
 
+#[allow(dead_code)]
 pub fn take_turn (board: &Board) -> Position
 {
     let mut rng = rand::thread_rng();
@@ -77,11 +80,10 @@ pub fn take_turn (board: &Board) -> Position
     empty_positions[position_to_choose]
 }
 
-use super::*;
-
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::board::{GameResult, Token};
 
     #[test]
     fn test_random_played_boards_differ() {
