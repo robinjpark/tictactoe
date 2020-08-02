@@ -7,7 +7,7 @@ pub mod simpleton_player {
 use super::*;
 
 #[allow(dead_code)]
-fn take_turn (board: &Board) -> Position
+pub fn take_turn (board: &Board) -> Position
 {
     let empty_positions = board.empty_positions();
     empty_positions[0]
@@ -67,7 +67,7 @@ pub mod random_player {
 
 use rand::Rng;
 
-fn take_turn (board: &Board) -> Position
+pub fn take_turn (board: &Board) -> Position
 {
     let mut rng = rand::thread_rng();
 
