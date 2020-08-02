@@ -6,6 +6,12 @@ pub struct OptimalPlayer {
 
 impl Player for OptimalPlayer {
     fn take_turn(&self, board: &Board) -> Position {
+        self.get_best_move(board)
+    }
+}
+
+impl OptimalPlayer {
+    fn get_best_move(&self, board: &Board) -> Position {
         let who_am_i = board.whose_turn();
         let potential_moves = board.empty_positions();
         let mut with_results = Vec::<(Position, GameResult)>::new();
@@ -25,9 +31,6 @@ impl Player for OptimalPlayer {
 
         potential_moves[0]
     }
-}
-
-impl OptimalPlayer {
 }
 
 #[cfg(test)]
