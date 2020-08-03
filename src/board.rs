@@ -72,11 +72,10 @@ impl Board {
     ///
     /// Examples
     /// ```
+    /// use tictactoelib::board::*;
     /// let board = Board::new();
     /// assert_eq!(board.get_game_result(), GameResult::InProgress);
     /// ```
-    // TODO: Unforunately, the above example is not checked for correctness!
-    // It has something to do with the crate being a binary, not a library.
     pub fn new() -> Board {
         Board { positions: [[None, None, None],
                             [None, None, None],
