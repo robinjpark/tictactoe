@@ -1,16 +1,11 @@
-#[cfg(test)]
 use crate::board::{Position, Board};
-#[cfg(test)]
 use crate::player::Player;
 
-#[cfg(test)]
 use rand::Rng;
 
-#[cfg(test)]
 pub struct RandomPlayer {
 }
 
-#[cfg(test)]
 impl Player for RandomPlayer {
     fn take_turn (&self, board: &Board) -> Position
     {
@@ -23,7 +18,6 @@ impl Player for RandomPlayer {
     }
 }
 
-#[cfg(test)]
 mod random_player_tests {
     use super::*;
     use crate::board::GameResult;

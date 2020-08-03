@@ -4,11 +4,12 @@ extern crate more_asserts;
 
 // Modules needed for benchmarking are public
 pub mod board;
-pub mod strategies;
 mod game;
-pub mod optimal;
 mod human;
+pub mod optimal;
 pub mod player;
+#[cfg(test)]
+pub mod strategies; // Only for unit testing
 
 use crate::board::{GameResult, Token};
 use crate::game::Game;
