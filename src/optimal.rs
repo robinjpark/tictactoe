@@ -14,7 +14,7 @@ impl OptimalPlayer {
     fn get_best_move(&self, board: &Board) -> Position {
         // To speed things up, first check if the center is still available.
         let center = Position::new(1,1);
-        if board.is_empty(center) {
+        if board.is_position_unused(center) {
             return center;
         }
 

@@ -127,7 +127,7 @@ impl Board {
     }
 
     // TODO: Rename!  This does not ask "is the board empty?"
-    pub fn is_empty(&self, position: Position) -> bool {
+    pub fn is_position_unused(&self, position: Position) -> bool {
         self.positions[position.row as usize][position.column as usize] == None
     }
 
@@ -405,9 +405,9 @@ mod board_tests {
                                              OOX\
                                              XXO");
         assert_eq!(full_board.empty_positions(), Vec::new());
-        assert_eq!(false, full_board.is_empty(Position::new(0, 0)));
-        assert_eq!(false, full_board.is_empty(Position::new(2, 2)));
-        assert_eq!(false, full_board.is_empty(Position::new(2, 2)));
+        assert_eq!(false, full_board.is_position_unused(Position::new(0, 0)));
+        assert_eq!(false, full_board.is_position_unused(Position::new(2, 2)));
+        assert_eq!(false, full_board.is_position_unused(Position::new(2, 2)));
     }
 
     #[test]
@@ -416,8 +416,8 @@ mod board_tests {
                                            OO-\
                                            XXO");
         assert_eq!(one_left.empty_positions(), vec![Position::new(1,2)]);
-        assert_eq!(true, one_left.is_empty(Position::new(1, 2)));
-        assert_eq!(false, one_left.is_empty(Position::new(2, 2)));
+        assert_eq!(true, one_left.is_position_unused(Position::new(1, 2)));
+        assert_eq!(false, one_left.is_position_unused(Position::new(2, 2)));
     }
 
     #[test]
@@ -426,9 +426,9 @@ mod board_tests {
                                            OOX\
                                            -XO");
         assert_eq!(two_left.empty_positions(), vec![Position::new(0,1), Position::new(2,0)]);
-        assert_eq!(true, two_left.is_empty(Position::new(0, 1)));
-        assert_eq!(true, two_left.is_empty(Position::new(2, 0)));
-        assert_eq!(false, two_left.is_empty(Position::new(2, 2)));
+        assert_eq!(true, two_left.is_position_unused(Position::new(0, 1)));
+        assert_eq!(true, two_left.is_position_unused(Position::new(2, 0)));
+        assert_eq!(false, two_left.is_position_unused(Position::new(2, 2)));
     }
 
     #[test]
