@@ -8,7 +8,7 @@ pub struct Game {
 
 impl Game {
     /// Creates and plays a game between two players, given their strategies.
-    pub fn new(x: &impl Player, o: &impl Player) -> Game {
+    pub fn new(x: Box<dyn Player>, o: Box<dyn Player>) -> Game {
         let mut board = Board::new();
 
         let mut turn_number = 1;
@@ -44,9 +44,9 @@ mod tests {
         let mut o_win_count = 0;
         println! ("Simulating {} games between players who play randomly.", GAME_COUNT);
         for _i in 1..GAME_COUNT+1 {
-            let x = RandomPlayer{};
-            let o = RandomPlayer{};
-            let game = Game::new(&x, &o);
+            let x = Box::new(RandomPlayer{});
+            let o = Box::new(RandomPlayer{});
+            let game = Game::new(x, o);
             match game.result() {
                 GameResult::Draw => draw_count += 1,
                 GameResult::Win(Token::X) => x_win_count += 1,

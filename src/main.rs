@@ -9,6 +9,7 @@ mod optimal;
 mod human;
 
 use crate::board::*;
+use crate::strategies::*;
 use crate::game::*;
 use crate::human::*;
 use crate::optimal::*;
@@ -18,10 +19,10 @@ fn main() {
     println!("In this version, X always plays first.");
 
     let human_token = get_player();
-    let human = HumanPlayer{};
-    let computer = OptimalPlayer{};
 
-    let game = if human_token == Token::X { Game::new(&human, &computer) } else  { Game::new(&computer, &human) };
+    let x: Box<dyn Player> = if human_token == Token::X { Box::new(HumanPlayer{}) } else { Box::new(OptimalPlayer{}) };
+    let o: Box<dyn Player> = if human_token == Token::X { Box::new(OptimalPlayer{}) } else { Box::new(HumanPlayer{}) };
+    let game = Game::new(x, o);
     display_result(game, human_token);
 }
 
