@@ -72,15 +72,18 @@ mod tests {
 
     #[test]
     fn test_never_loses() {
-        let x = Box::new(OptimalPlayer{});
-        let o = Box::new(RandomPlayer{});
-        let game = Game::new(x, o);
-        assert_ne!(game.result(), GameResult::Win(Token::O));
+        const NUM_GAMES: u32 = 50;
+        for _i in 0..NUM_GAMES {
+            let x = Box::new(OptimalPlayer{});
+            let o = Box::new(RandomPlayer{});
+            let game = Game::new(x, o);
+            assert_ne!(game.result(), GameResult::Win(Token::O));
 
-        let x = Box::new(RandomPlayer{});
-        let o = Box::new(OptimalPlayer{});
-        let game = Game::new(x, o);
-        assert_ne!(game.result(), GameResult::Win(Token::X));
+            let x = Box::new(RandomPlayer{});
+            let o = Box::new(OptimalPlayer{});
+            let game = Game::new(x, o);
+            assert_ne!(game.result(), GameResult::Win(Token::X));
+        }
     }
 
     #[test]
