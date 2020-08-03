@@ -9,6 +9,7 @@ pub struct RandomPlayer {
 impl Player for RandomPlayer {
     fn take_turn (&self, board: &Board) -> Position
     {
+        return board.empty_positions()[0];
         let mut rng = rand::thread_rng();
 
         let empty_positions = board.empty_positions();
