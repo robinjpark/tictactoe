@@ -108,6 +108,7 @@ impl Board {
                                          Token::from_char(chars.next().unwrap())]],
                             turn_number: 9 - blank_count as u8 + 1
         };
+        #[cfg(debug_assertions)]
         board.check_invariants();
         board
     }
@@ -147,7 +148,9 @@ impl Board {
     /// Panics if the given player is playing out of turn.
     /// Token::X goes first, followed by Token::O, ...
     pub fn add_move(&mut self, player: Token, at: Position) {
+        #[cfg(debug_assertions)]
         self.check_invariants();
+
         if player != self.whose_turn() {
             panic!("It is not {}'s turn!", player);
         }
@@ -156,6 +159,8 @@ impl Board {
         }
         self.positions[at.row as usize][at.column as usize] = Some(player);
         self.turn_number += 1;
+
+        #[cfg(debug_assertions)]
         self.check_invariants();
     }
 
@@ -212,6 +217,7 @@ impl Board {
     }
 
     #[doc(hidden)]
+    #[cfg(debug_assertions)]
     fn check_invariants(&self) {
         let _winner = self.get_game_result();
         if self.turn_number == 0 || self.turn_number > 10 {
