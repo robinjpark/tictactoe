@@ -30,13 +30,11 @@ impl OptimalPlayer {
         }
 
         for (potential_move, result) in positions_and_results.iter() {
-            //assert_ne!(*result, GameResult::InProgress);
             if *result == GameResult::Win(who_am_i) {
                 return *potential_move;
             }
         }
         for (potential_move, result) in positions_and_results.iter() {
-            //assert_ne!(*result, GameResult::InProgress);
             if *result == GameResult::Draw {
                 return *potential_move;
             }
@@ -64,32 +62,24 @@ mod tests {
     use crate::game::*;
 
     #[test]
-    fn test_always_draws() {
-        const NUM_GAMES: u32 = 10;
-        for _i in 0..NUM_GAMES {
-            let x = Box::new(OptimalPlayer{});
-            let o = Box::new(OptimalPlayer{});
-            let game = Game::new(x, o);
-            assert_eq!(game.result(), GameResult::Draw);
-        }
+    fn test_draws_against_itself() {
+        let x = Box::new(OptimalPlayer{});
+        let o = Box::new(OptimalPlayer{});
+        let game = Game::new(x, o);
+        assert_eq!(game.result(), GameResult::Draw);
     }
 
     #[test]
     fn test_never_loses() {
-        const NUM_GAMES: u32 = 10;
-        for _i in 0..NUM_GAMES {
-            let x = Box::new(OptimalPlayer{});
-            let o = Box::new(RandomPlayer{});
-            let game = Game::new(x, o);
-            assert_ne!(game.result(), GameResult::Win(Token::O));
-        }
+        let x = Box::new(OptimalPlayer{});
+        let o = Box::new(RandomPlayer{});
+        let game = Game::new(x, o);
+        assert_ne!(game.result(), GameResult::Win(Token::O));
 
-        for _i in 0..NUM_GAMES {
-            let x = Box::new(RandomPlayer{});
-            let o = Box::new(OptimalPlayer{});
-            let game = Game::new(x, o);
-            assert_ne!(game.result(), GameResult::Win(Token::X));
-        }
+        let x = Box::new(RandomPlayer{});
+        let o = Box::new(OptimalPlayer{});
+        let game = Game::new(x, o);
+        assert_ne!(game.result(), GameResult::Win(Token::X));
     }
 
     #[test]
