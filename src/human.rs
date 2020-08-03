@@ -1,5 +1,5 @@
-use crate::board::*;
-use crate::player::*;
+use crate::board::{Board, Position};
+use crate::player::Player;
 use std::io;
 
 pub struct HumanPlayer {

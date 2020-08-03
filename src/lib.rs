@@ -10,11 +10,11 @@ pub mod optimal;
 mod human;
 pub mod player;
 
-use crate::board::*;
-use crate::game::*;
-use crate::human::*;
-use crate::optimal::*;
-use crate::player::*;
+use crate::board::{GameResult, Token};
+use crate::game::Game;
+use crate::human::HumanPlayer;
+use crate::optimal::OptimalPlayer;
+use crate::player::Player;
 
 pub fn main() {
     println!("Tic-Tac-Toe");

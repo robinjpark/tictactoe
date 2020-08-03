@@ -1,4 +1,4 @@
-use crate::board::*;
+use crate::board::{GameResult, Board, Token};
 use crate::player::Player;
 
 /// Game represents a single game played between two players
@@ -31,7 +31,7 @@ impl Game {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::strategies::*;
+    use crate::strategies::RandomPlayer;
 
     #[test]
     fn test_game_between_random_players() {

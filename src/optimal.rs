@@ -1,4 +1,4 @@
-use crate::board::*;
+use crate::board::{Board, Position, GameResult};
 use crate::player::Player;
 #[cfg(test)]
 use crate::strategies::RandomPlayer;
@@ -59,7 +59,8 @@ impl OptimalPlayer {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::game::*;
+    use crate::game::Game;
+    use crate::board::Token;
 
     #[test]
     fn test_draws_against_itself() {

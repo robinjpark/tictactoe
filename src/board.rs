@@ -72,7 +72,7 @@ impl Board {
     ///
     /// Examples
     /// ```
-    /// use tictactoelib::board::*;
+    /// use tictactoelib::board::{Board, GameResult};
     /// let board = Board::new();
     /// assert_eq!(board.get_game_result(), GameResult::InProgress);
     /// ```
