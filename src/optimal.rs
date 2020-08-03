@@ -26,6 +26,9 @@ impl OptimalPlayer {
             let mut next_board = *board;
             next_board.add_move(who_am_i, potential_move);
             let result = self.get_eventual_game_result(&next_board);
+            if result == GameResult::Win(who_am_i) {
+                return potential_move;
+            }
             positions_and_results.push((potential_move, result));
         }
 
