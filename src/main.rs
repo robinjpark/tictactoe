@@ -36,8 +36,8 @@ fn get_player() -> Token {
         let input = input.trim();
         println!("You entered '{}'", input);
         let token = match input {
-            "X" => Token::X,
-            "O" => Token::O,
+            "X" | "x" => Token::X,
+            "O" | "o" => Token::O,
             &_ => {
                 println!("Enter 'X' or 'O'!");
                 continue;
