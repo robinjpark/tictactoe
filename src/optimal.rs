@@ -33,11 +33,6 @@ impl OptimalPlayer {
         }
 
         for (potential_move, result) in positions_and_results.iter() {
-            if *result == GameResult::Win(who_am_i) {
-                return *potential_move;
-            }
-        }
-        for (potential_move, result) in positions_and_results.iter() {
             if *result == GameResult::Draw {
                 return *potential_move;
             }
