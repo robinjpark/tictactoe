@@ -1,5 +1,5 @@
 use crate::board::*;
-use crate::strategies::*;
+use crate::player::*;
 use std::io;
 
 pub struct HumanPlayer {

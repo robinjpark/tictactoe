@@ -8,12 +8,13 @@ pub mod strategies;
 mod game;
 pub mod optimal;
 mod human;
+pub mod player;
 
 use crate::board::*;
-use crate::strategies::*;
 use crate::game::*;
 use crate::human::*;
 use crate::optimal::*;
+use crate::player::*;
 
 pub fn main() {
     println!("Tic-Tac-Toe");

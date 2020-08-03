@@ -1,5 +1,5 @@
 use crate::board::*;
-use crate::strategies::Player;
+use crate::player::Player;
 
 /// Game represents a single game played between two players
 pub struct Game {

@@ -1,7 +1,7 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use tictactoelib::optimal::*;
 use tictactoelib::board::*;
-use tictactoelib::strategies::*;
+use tictactoelib::player::*;
 
 pub fn optimal_player_benchmark(c: &mut Criterion) {
     let player = OptimalPlayer{};

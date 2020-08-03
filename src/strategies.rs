@@ -1,10 +1,10 @@
+#[cfg(test)]
 use crate::board::{Position, Board};
 #[cfg(test)]
-use rand::Rng;
+use crate::player::Player;
 
-pub trait Player {
-    fn take_turn (&self, board: &Board) -> Position;
-}
+#[cfg(test)]
+use rand::Rng;
 
 #[cfg(test)]
 pub struct RandomPlayer {

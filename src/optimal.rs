@@ -1,5 +1,7 @@
 use crate::board::*;
-use crate::strategies::*;
+use crate::player::Player;
+#[cfg(test)]
+use crate::strategies::RandomPlayer;
 
 pub struct OptimalPlayer {
 }
