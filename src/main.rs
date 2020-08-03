@@ -19,9 +19,8 @@ fn main() {
     println!("In this version, X always plays first.");
 
     let human_token = get_player();
-
-    let x: Box<dyn Player> = if human_token == Token::X { Box::new(HumanPlayer{}) } else { Box::new(OptimalPlayer{}) };
-    let o: Box<dyn Player> = if human_token == Token::X { Box::new(OptimalPlayer{}) } else { Box::new(HumanPlayer{}) };
+    let x: Box<dyn Player> = if human_token == Token::X { Box::new(HumanPlayer::new()) } else { Box::new(OptimalPlayer{}) };
+    let o: Box<dyn Player> = if human_token == Token::X { Box::new(OptimalPlayer{}) } else { Box::new(HumanPlayer::new()) };
     let game = Game::new(x, o);
     display_result(game, human_token);
 }
@@ -34,7 +33,6 @@ fn get_player() -> Token {
         let mut input = String::new();
         std::io::stdin().read_line(&mut input).expect("error getting input");
         let input = input.trim();
-        println!("You entered '{}'", input);
         let token = match input {
             "X" | "x" => Token::X,
             "O" | "o" => Token::O,

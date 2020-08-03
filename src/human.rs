@@ -3,6 +3,27 @@ use crate::strategies::*;
 use std::io;
 
 pub struct HumanPlayer {
+    _privates: u32,
+}
+
+impl HumanPlayer {
+    pub fn new() -> HumanPlayer {
+        HumanPlayer::print_instructions();
+        HumanPlayer{ _privates: 0 }
+    }
+
+    fn print_instructions() {
+        println!("");
+        println!("Instructions...");
+        println!("I will query for a number between 1..9 for each move.");
+        println!("The numbers correspond to the following diagram:");
+        println!("=====");
+        println!("|123|");
+        println!("|456|");
+        println!("|789|");
+        println!("=====");
+        println!("");
+    }
 }
 
 impl Player for HumanPlayer {
