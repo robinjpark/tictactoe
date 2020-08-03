@@ -26,7 +26,7 @@ impl Player for RandomPlayer {
 #[cfg(test)]
 mod random_player_tests {
     use super::*;
-    use crate::board::{GameResult, Token};
+    use crate::board::GameResult;
 
     #[test]
     fn test_random_played_boards_differ() {
@@ -39,15 +39,10 @@ mod random_player_tests {
         let mut games = Vec::<Board>::new();
         for game in 1..MAX_GAMES+1 {
             let mut board = Board::new();
-            for turn in 1..10 {
+            for _turn in 1..10 {
+                let whose_turn = board.whose_turn();
                 let position = player.take_turn(&board);
-                let token =
-                    if turn % 2 == 1 {
-                        Token::X
-                    } else {
-                        Token::O
-                    };
-                board.add_move(token, position);
+                board.add_move(whose_turn, position);
                 if let GameResult::Win(_winner) = board.get_game_result() {
                     break;
                 }

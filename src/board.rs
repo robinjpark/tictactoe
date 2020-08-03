@@ -149,11 +149,8 @@ impl Board {
     /// Token::X goes first, followed by Token::O, ...
     pub fn add_move(&mut self, player: Token, at: Position) {
         self.check_invariants();
-        if player == Token::X && self.turn_number % 2 == 0 {
-            panic!("It is not X's turn!");
-        }
-        if player == Token::O && self.turn_number % 2 == 1 {
-            panic!("It is not O's turn!");
+        if player != self.whose_turn() {
+            panic!("It is not {}'s turn!", player);
         }
         if let Some(_player) = self.positions[at.row as usize][at.column as usize] {
             panic!("Position [{},{}] is already occupied!", at.row, at.column);

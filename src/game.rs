@@ -11,14 +11,12 @@ impl Game {
     pub fn new(x: Box<dyn Player>, o: Box<dyn Player>) -> Game {
         let mut board = Board::new();
 
-        let mut turn_number = 1;
         while board.get_game_result() == GameResult::InProgress {
-            let token = if turn_number % 2 == 1 { Token::X } else { Token::O };
-            println!("It is {}'s turn", token);
-            let their_move = if turn_number % 2 == 1 { x.take_turn(&board) } else { o.take_turn(&board) };
-            board.add_move(token, their_move);
+            let whose_turn = board.whose_turn();
+            println!("It is {}'s turn", whose_turn);
+            let their_move = if whose_turn == Token::X { x.take_turn(&board) } else { o.take_turn(&board) };
+            board.add_move(whose_turn, their_move);
             println!("{}", board);
-            turn_number += 1;
         }
 
         Game { board }
