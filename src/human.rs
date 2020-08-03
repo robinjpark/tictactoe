@@ -17,11 +17,11 @@ impl HumanPlayer {
         println!("Instructions...");
         println!("I will query for a number between 1..9 for each move.");
         println!("The numbers correspond to the following diagram:");
-        println!("=====");
-        println!("|123|");
-        println!("|456|");
-        println!("|789|");
-        println!("=====");
+        println!("┌───┐");
+        println!("│123│");
+        println!("│456│");
+        println!("│789│");
+        println!("└───┘");
         println!("");
     }
 }

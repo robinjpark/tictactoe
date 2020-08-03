@@ -224,12 +224,12 @@ impl Board {
 impl std::fmt::Display for Board {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // Will look something like:
-        // =====
+        // ┌───┐
         // |X O|
         // | X |
         // |OOX|
-        // =====
-        write!(f, "=====\n|{}{}{}|\n|{}{}{}|\n|{}{}{}|\n=====",
+        // └───┘
+        write!(f, "┌───┐\n│{}{}{}│\n│{}{}{}│\n│{}{}{}│\n└───┘",
                match self.positions[0][0] {
                    Some(Token::X) => "X",
                    Some(Token::O) => "O",
@@ -510,13 +510,13 @@ mod board_tests {
         let board = Board::from_string("XOX\
                                         OXO\
                                         OXX");
-        assert_eq!(format!("{}", board), "=====\n|XOX|\n|OXO|\n|OXX|\n=====");
+        assert_eq!(format!("{}", board), "┌───┐\n│XOX│\n│OXO│\n│OXX│\n└───┘");
 
         let board = Board::from_string("XOX\
                                         ---\
                                         OOX");
         println!("{}", board);
-        assert_eq!(format!("{}", board), "=====\n|XOX|\n|   |\n|OOX|\n=====");
+        assert_eq!(format!("{}", board), "┌───┐\n│XOX│\n│   │\n│OOX│\n└───┘");
     }
 
     #[test]

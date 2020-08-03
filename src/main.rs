@@ -27,6 +27,7 @@ fn main() {
 
 fn get_player() -> Token {
     println!("You cannot win!");
+    println!("ᕙ(⇀‸↼‶)ᕗ");
     println!("Do you want to be X or O?");
 
     loop {
@@ -47,14 +48,21 @@ fn get_player() -> Token {
 
 fn display_result(game: Game, human_token: Token) {
     match game.result() {
-        GameResult::Draw => println!("You cannot beat me!"),
+        GameResult::Draw => {
+            println!("¯\\_(ツ)_/¯");
+            println!("It is a draw?");
+            println!("ノಠ益ಠ)ノ彡┻━┻");
+        },
         GameResult::InProgress => panic!("Should not happen!"),
         GameResult::Win(winner) => {
             if winner == human_token {
                 panic!("What??   I cannot lose!!!");
             } else {
+                println!("ᕙ(⇀‸↼‶)ᕗ");
                 println!("Ha!  I beat you!");
+                println!("ᕙ(⇀‸↼‶)ᕗ");
             }
         }
     }
+    println!("");
 }
