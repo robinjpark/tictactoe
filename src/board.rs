@@ -76,6 +76,7 @@ impl Board {
     /// let board = Board::new();
     /// assert_eq!(board.get_game_result(), GameResult::InProgress);
     /// ```
+    #[allow(clippy::new_without_default)]
     pub fn new() -> Board {
         Board { positions: [[None, None, None],
                             [None, None, None],
