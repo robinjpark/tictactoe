@@ -115,7 +115,7 @@ impl Board {
 
     /// Returns all of the empty positions in a vector
     pub fn empty_positions(&self) -> Vec<Position> {
-        let mut vec = Vec::new();
+        let mut vec = Vec::with_capacity(9);
         for row in 0..3 {
             for column in 0..3 {
                 if self.positions[row][column] == None {
