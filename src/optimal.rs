@@ -20,7 +20,7 @@ impl OptimalPlayer {
 
         let who_am_i = board.whose_turn();
 
-        let mut positions_and_results = Vec::<(Position, GameResult)>::new();
+        let mut positions_and_results = Vec::<(Position, GameResult)>::with_capacity(8);
 
         for potential_move in board.empty_positions() {
             let mut next_board = *board;
