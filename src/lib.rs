@@ -2,10 +2,11 @@
 #[macro_use]
 extern crate more_asserts;
 
-mod board;
-mod strategies;
+// Modules needed for benchmarking are public
+pub mod board;
+pub mod strategies;
 mod game;
-mod optimal;
+pub mod optimal;
 mod human;
 
 use crate::board::*;
