@@ -13,7 +13,7 @@ impl HumanPlayer {
     }
 
     fn print_instructions() {
-        println!("");
+        println!();
         println!("Instructions...");
         println!("I will query for a number between 1..9 for each move.");
         println!("The numbers correspond to the following diagram:");
@@ -22,7 +22,7 @@ impl HumanPlayer {
         println!("│456│");
         println!("│789│");
         println!("└───┘");
-        println!("");
+        println!();
     }
 }
 

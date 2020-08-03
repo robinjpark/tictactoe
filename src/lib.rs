@@ -67,5 +67,5 @@ fn display_result(game: Game, human_token: Token) {
             }
         }
     }
-    println!("");
+    println!();
 }
