@@ -58,7 +58,7 @@ impl Position {
     }
 }
 
-#[derive(PartialEq, Debug, Copy, Clone)]
+#[derive(Default, PartialEq, Debug, Copy, Clone)]
 /// Represents a tic-tac-toe game board.
 pub struct Board {
     #[doc(hidden)]
