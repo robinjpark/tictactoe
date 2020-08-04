@@ -1,4 +1,4 @@
-tic-tac-toe [![Build Status](https://travis-ci.com/robinjpark/tictactoe.svg?token=K5UsvTeLCfHUcRwSY7ts&branch=master)](https://travis-ci.com/robinjpark/tictactoe)
+# tic-tac-toe [![Build Status](https://travis-ci.com/robinjpark/tictactoe.svg?token=K5UsvTeLCfHUcRwSY7ts&branch=master)](https://travis-ci.com/robinjpark/tictactoe)
 
 A simple tic-tac-toe console application, build solely to:
 - learn the rust language
