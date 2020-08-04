@@ -54,7 +54,7 @@ impl Position {
         if column > 2 {
             panic!("Invalid column: {}", column);
         }
-        Position{ row, column }
+        Position { row, column }
     }
 }
 
@@ -78,36 +78,61 @@ impl Board {
     /// ```
     #[allow(clippy::new_without_default)]
     pub fn new() -> Board {
-        Board { positions: [[None, None, None],
-                            [None, None, None],
-                            [None, None, None]],
-                turn_number: 1 } // Starts at 1, not 0!
+        Board {
+            positions: [[None, None, None], [None, None, None], [None, None, None]],
+            turn_number: 1,
+        } // Starts at 1, not 0!
     }
 
     #[cfg(test)]
     pub fn from_string(contents: &str) -> Board {
         if contents.len() != 9 {
-            panic!("Invalid string length {} for board: '{}'", contents.len(), contents);
+            panic!(
+                "Invalid string length {} for board: '{}'",
+                contents.len(),
+                contents
+            );
         }
-        let x_count: i8 = contents.chars().filter(|the_char| *the_char == 'X').collect::<Vec<char>>().len() as i8;
-        let o_count: i8 = contents.chars().filter(|the_char| *the_char == 'O').collect::<Vec<char>>().len() as i8;
+        let x_count: i8 = contents
+            .chars()
+            .filter(|the_char| *the_char == 'X')
+            .collect::<Vec<char>>()
+            .len() as i8;
+        let o_count: i8 = contents
+            .chars()
+            .filter(|the_char| *the_char == 'O')
+            .collect::<Vec<char>>()
+            .len() as i8;
         let diff_count = x_count - o_count;
         if diff_count != 0 && diff_count != 1 {
             panic!("Invalid number of Xs and Os!");
         }
 
-        let blank_count = contents.chars().filter(|the_char| *the_char == '-').collect::<Vec<char>>().len();
+        let blank_count = contents
+            .chars()
+            .filter(|the_char| *the_char == '-')
+            .collect::<Vec<char>>()
+            .len();
         let mut chars = contents.chars();
-        let board = Board { positions: [[Token::from_char(chars.next().unwrap()),
-                                         Token::from_char(chars.next().unwrap()),
-                                         Token::from_char(chars.next().unwrap())],
-                                        [Token::from_char(chars.next().unwrap()),
-                                         Token::from_char(chars.next().unwrap()),
-                                         Token::from_char(chars.next().unwrap())],
-                                        [Token::from_char(chars.next().unwrap()),
-                                         Token::from_char(chars.next().unwrap()),
-                                         Token::from_char(chars.next().unwrap())]],
-                            turn_number: 9 - blank_count as u8 + 1
+        let board = Board {
+            positions: [
+                [
+                    Token::from_char(chars.next().unwrap()),
+                    Token::from_char(chars.next().unwrap()),
+                    Token::from_char(chars.next().unwrap()),
+                ],
+                [
+                    Token::from_char(chars.next().unwrap()),
+                    Token::from_char(chars.next().unwrap()),
+                    Token::from_char(chars.next().unwrap()),
+                ],
+                [
+                    Token::from_char(chars.next().unwrap()),
+                    Token::from_char(chars.next().unwrap()),
+                    Token::from_char(chars.next().unwrap()),
+                ],
+            ],
+            turn_number: 9 - blank_count as u8 + 1,
         };
         #[cfg(debug_assertions)]
         board.check_invariants();
@@ -175,41 +200,40 @@ impl Board {
         let mut result = None;
         for row in 0..3 {
             if let Some(player) = self.positions[row][0] {
-                if self.positions[row][1] == Some(player) &&
-                   self.positions[row][2] == Some(player) {
-                       if result != None && result != Some(GameResult::Win(player)) {
-                           panic!("Game cannot have multiple winners!");
-                       }
-                       result = Some(GameResult::Win(player));
+                if self.positions[row][1] == Some(player) && self.positions[row][2] == Some(player)
+                {
+                    if result != None && result != Some(GameResult::Win(player)) {
+                        panic!("Game cannot have multiple winners!");
+                    }
+                    result = Some(GameResult::Win(player));
                 }
             }
         }
 
         for column in 0..3 {
             if let Some(player) = self.positions[0][column] {
-                if self.positions[1][column] == Some(player) &&
-                   self.positions[2][column] == Some(player) {
-                       if result != None && result != Some(GameResult::Win(player)) {
-                           panic!("Game cannot have multiple winners!");
-                       }
-                       result = Some(GameResult::Win(player));
+                if self.positions[1][column] == Some(player)
+                    && self.positions[2][column] == Some(player)
+                {
+                    if result != None && result != Some(GameResult::Win(player)) {
+                        panic!("Game cannot have multiple winners!");
+                    }
+                    result = Some(GameResult::Win(player));
                 }
             }
         }
 
         // diagonal in direction '\'
         if let Some(player) = self.positions[0][0] {
-            if self.positions[1][1] == Some(player) &&
-               self.positions[2][2] == Some(player) {
-                   result = Some(GameResult::Win(player));
+            if self.positions[1][1] == Some(player) && self.positions[2][2] == Some(player) {
+                result = Some(GameResult::Win(player));
             }
         }
 
         // diagonal in direction '/'
         if let Some(player) = self.positions[2][0] {
-            if self.positions[1][1] == Some(player) &&
-               self.positions[0][2] == Some(player) {
-               result = Some(GameResult::Win(player));
+            if self.positions[1][1] == Some(player) && self.positions[0][2] == Some(player) {
+                result = Some(GameResult::Win(player));
             }
         }
 
@@ -240,52 +264,55 @@ impl std::fmt::Display for Board {
         // | X |
         // |OOX|
         // └───┘
-        write!(f, "┌───┐\n│{}{}{}│\n│{}{}{}│\n│{}{}{}│\n└───┘",
-               match self.positions[0][0] {
-                   Some(Token::X) => "X",
-                   Some(Token::O) => "O",
-                   None => " ",
-               },
-               match self.positions[0][1] {
-                   Some(Token::X) => "X",
-                   Some(Token::O) => "O",
-                   None => " ",
-               },
-               match self.positions[0][2] {
-                   Some(Token::X) => "X",
-                   Some(Token::O) => "O",
-                   None => " ",
-               },
-               match self.positions[1][0] {
-                   Some(Token::X) => "X",
-                   Some(Token::O) => "O",
-                   None => " ",
-               },
-               match self.positions[1][1] {
-                   Some(Token::X) => "X",
-                   Some(Token::O) => "O",
-                   None => " ",
-               },
-               match self.positions[1][2] {
-                   Some(Token::X) => "X",
-                   Some(Token::O) => "O",
-                   None => " ",
-               },
-               match self.positions[2][0] {
-                   Some(Token::X) => "X",
-                   Some(Token::O) => "O",
-                   None => " ",
-               },
-               match self.positions[2][1] {
-                   Some(Token::X) => "X",
-                   Some(Token::O) => "O",
-                   None => " ",
-               },
-               match self.positions[2][2] {
-                   Some(Token::X) => "X",
-                   Some(Token::O) => "O",
-                   None => " ",
-               })
+        write!(
+            f,
+            "┌───┐\n│{}{}{}│\n│{}{}{}│\n│{}{}{}│\n└───┘",
+            match self.positions[0][0] {
+                Some(Token::X) => "X",
+                Some(Token::O) => "O",
+                None => " ",
+            },
+            match self.positions[0][1] {
+                Some(Token::X) => "X",
+                Some(Token::O) => "O",
+                None => " ",
+            },
+            match self.positions[0][2] {
+                Some(Token::X) => "X",
+                Some(Token::O) => "O",
+                None => " ",
+            },
+            match self.positions[1][0] {
+                Some(Token::X) => "X",
+                Some(Token::O) => "O",
+                None => " ",
+            },
+            match self.positions[1][1] {
+                Some(Token::X) => "X",
+                Some(Token::O) => "O",
+                None => " ",
+            },
+            match self.positions[1][2] {
+                Some(Token::X) => "X",
+                Some(Token::O) => "O",
+                None => " ",
+            },
+            match self.positions[2][0] {
+                Some(Token::X) => "X",
+                Some(Token::O) => "O",
+                None => " ",
+            },
+            match self.positions[2][1] {
+                Some(Token::X) => "X",
+                Some(Token::O) => "O",
+                None => " ",
+            },
+            match self.positions[2][2] {
+                Some(Token::X) => "X",
+                Some(Token::O) => "O",
+                None => " ",
+            }
+        )
     } // fn fmt()
 } // impl std::fmt::Display for Board
 
@@ -364,15 +391,19 @@ mod board_tests {
 
     #[test]
     fn test_board_from_string() {
-        let full_board = Board::from_string("XOX\
-                                             OXO\
-                                             XOX");
+        let full_board = Board::from_string(
+            "XOX\
+             OXO\
+             XOX",
+        );
         assert_eq!(Some(Token::X), full_board.positions[0][0]);
         assert_eq!(10, full_board.turn_number);
 
-        let empty_board = Board::from_string("---\
-                                              ---\
-                                              ---");
+        let empty_board = Board::from_string(
+            "---\
+             ---\
+             ---",
+        );
         assert_eq!(None, empty_board.positions[0][0]);
         assert_eq!(1, empty_board.turn_number);
         assert_eq!(Board::new(), empty_board);
@@ -381,40 +412,50 @@ mod board_tests {
     #[test]
     #[should_panic(expected = "Invalid character for player")]
     fn test_invalid_board_from_string_bad_char() {
-        let _invalid_player_board = Board::from_string("XOX\
-                                                        O O\
-                                                        XOX");
+        let _invalid_player_board = Board::from_string(
+            "XOX\
+             O O\
+             XOX",
+        );
     }
 
     #[test]
     #[should_panic(expected = "Invalid string length 10")]
     fn test_invalid_board_from_string_bad_length() {
-        let _invalid_length_board = Board::from_string("XOX\
-                                                        OXO\
-                                                        XOXO");
+        let _invalid_length_board = Board::from_string(
+            "XOX\
+             OXO\
+             XOXO",
+        );
     }
 
     #[test]
     #[should_panic(expected = "Invalid number of Xs and Os")]
     fn test_invalid_board_from_string_bad_ratio() {
-        let _invalid_count_board = Board::from_string("XXX\
-                                                       ---\
-                                                       --O");
+        let _invalid_count_board = Board::from_string(
+            "XXX\
+             ---\
+             --O",
+        );
     }
 
     #[test]
     #[should_panic(expected = "Game cannot have multiple winners!")]
     fn test_invalid_board_from_string_multiple_winners() {
-        let _multiple_winners_board = Board::from_string("XXX\
-                                                          OOO\
-                                                          ---");
+        let _multiple_winners_board = Board::from_string(
+            "XXX\
+             OOO\
+             ---",
+        );
     }
 
     #[test]
     fn test_empty_positions_full_board() {
-        let full_board = Board::from_string("XOX\
-                                             OOX\
-                                             XXO");
+        let full_board = Board::from_string(
+            "XOX\
+             OOX\
+             XXO",
+        );
         assert_eq!(full_board.empty_positions(), Vec::new());
         assert_eq!(false, full_board.is_position_unused(Position::new(0, 0)));
         assert_eq!(false, full_board.is_position_unused(Position::new(2, 2)));
@@ -423,20 +464,27 @@ mod board_tests {
 
     #[test]
     fn test_empty_positions_one_position_empty() {
-        let one_left = Board::from_string("XOX\
-                                           OO-\
-                                           XXO");
-        assert_eq!(one_left.empty_positions(), vec![Position::new(1,2)]);
+        let one_left = Board::from_string(
+            "XOX\
+             OO-\
+             XXO",
+        );
+        assert_eq!(one_left.empty_positions(), vec![Position::new(1, 2)]);
         assert_eq!(true, one_left.is_position_unused(Position::new(1, 2)));
         assert_eq!(false, one_left.is_position_unused(Position::new(2, 2)));
     }
 
     #[test]
     fn test_empty_positions_two_positions_empty() {
-        let two_left = Board::from_string("X-X\
-                                           OOX\
-                                           -XO");
-        assert_eq!(two_left.empty_positions(), vec![Position::new(0,1), Position::new(2,0)]);
+        let two_left = Board::from_string(
+            "X-X\
+             OOX\
+             -XO",
+        );
+        assert_eq!(
+            two_left.empty_positions(),
+            vec![Position::new(0, 1), Position::new(2, 0)]
+        );
         assert_eq!(true, two_left.is_position_unused(Position::new(0, 1)));
         assert_eq!(true, two_left.is_position_unused(Position::new(2, 0)));
         assert_eq!(false, two_left.is_position_unused(Position::new(2, 2)));
@@ -445,29 +493,44 @@ mod board_tests {
     #[test]
     fn test_empty_positions_empty_board() {
         let two_left = Board::new();
-        assert_eq!(two_left.empty_positions(), vec![Position::new(0,0), Position::new(0,1), Position::new(0,2),
-                                                    Position::new(1,0), Position::new(1,1), Position::new(1,2),
-                                                    Position::new(2,0), Position::new(2,1), Position::new(2,2)]);
+        assert_eq!(
+            two_left.empty_positions(),
+            vec![
+                Position::new(0, 0),
+                Position::new(0, 1),
+                Position::new(0, 2),
+                Position::new(1, 0),
+                Position::new(1, 1),
+                Position::new(1, 2),
+                Position::new(2, 0),
+                Position::new(2, 1),
+                Position::new(2, 2)
+            ]
+        );
     }
 
     #[test]
     fn test_whose_turn() {
         let mut board = Board::new();
         assert_eq!(board.whose_turn(), Some(Token::X));
-        board.add_move(Token::X, Position::new(0,0));
+        board.add_move(Token::X, Position::new(0, 0));
         assert_eq!(board.whose_turn(), Some(Token::O));
     }
 
     #[test]
     fn test_whose_turn_game_over() {
-        let draw = Board::from_string("XOX\
-                                       OOX\
-                                       XXO");
+        let draw = Board::from_string(
+            "XOX\
+             OOX\
+             XXO",
+        );
         assert_eq!(draw.whose_turn(), None);
 
-        let win = Board::from_string("XXX\
-                                      OO-\
-                                      ---");
+        let win = Board::from_string(
+            "XXX\
+             OO-\
+             ---",
+        );
         assert_eq!(win.whose_turn(), None);
     }
 
@@ -500,7 +563,6 @@ mod board_tests {
         assert_eq!(Some(Token::O), board.positions[0][2]);
         assert_eq!(Some(Token::O), board.positions[1][2]);
         assert_eq!(Some(Token::O), board.positions[2][1]);
-
     }
 
     #[test]
@@ -531,14 +593,18 @@ mod board_tests {
 
     #[test]
     fn test_board_display() {
-        let board = Board::from_string("XOX\
-                                        OXO\
-                                        OXX");
+        let board = Board::from_string(
+            "XOX\
+             OXO\
+             OXX",
+        );
         assert_eq!(format!("{}", board), "┌───┐\n│XOX│\n│OXO│\n│OXX│\n└───┘");
 
-        let board = Board::from_string("XOX\
-                                        ---\
-                                        OOX");
+        let board = Board::from_string(
+            "XOX\
+             ---\
+             OOX",
+        );
         println!("{}", board);
         assert_eq!(format!("{}", board), "┌───┐\n│XOX│\n│   │\n│OOX│\n└───┘");
     }
@@ -554,52 +620,70 @@ mod board_tests {
         board.add_move(Token::X, Position::new(0, 2));
         assert_eq!(board.get_game_result(), GameResult::Win(Token::X));
 
-        let board = Board::from_string("XXX\
-                                        OO-\
-                                        ---");
+        let board = Board::from_string(
+            "XXX\
+             OO-\
+             ---",
+        );
         assert_eq!(board.get_game_result(), GameResult::Win(Token::X));
 
-        let board = Board::from_string("XX-\
-                                        OOO\
-                                        X--");
+        let board = Board::from_string(
+            "XX-\
+             OOO\
+             X--",
+        );
         assert_eq!(board.get_game_result(), GameResult::Win(Token::O));
 
-        let board = Board::from_string("XX-\
-                                        X--\
-                                        OOO");
+        let board = Board::from_string(
+            "XX-\
+             X--\
+             OOO",
+        );
         assert_eq!(board.get_game_result(), GameResult::Win(Token::O));
 
-        let board = Board::from_string("XO-\
-                                        XO-\
-                                        X--");
+        let board = Board::from_string(
+            "XO-\
+             XO-\
+             X--",
+        );
         assert_eq!(board.get_game_result(), GameResult::Win(Token::X));
 
-        let board = Board::from_string("XO-\
-                                        -O-\
-                                        XOX");
+        let board = Board::from_string(
+            "XO-\
+             -O-\
+             XOX",
+        );
         assert_eq!(board.get_game_result(), GameResult::Win(Token::O));
 
-        let board = Board::from_string("-OX\
-                                        --X\
-                                        -OX");
+        let board = Board::from_string(
+            "-OX\
+             --X\
+             -OX",
+        );
         assert_eq!(board.get_game_result(), GameResult::Win(Token::X));
 
-        let board = Board::from_string("X-O\
-                                        -X-\
-                                        O-X");
+        let board = Board::from_string(
+            "X-O\
+             -X-\
+             O-X",
+        );
         assert_eq!(board.get_game_result(), GameResult::Win(Token::X));
 
-        let board = Board::from_string("X-O\
-                                        XO-\
-                                        O-X");
+        let board = Board::from_string(
+            "X-O\
+             XO-\
+             O-X",
+        );
         assert_eq!(board.get_game_result(), GameResult::Win(Token::O));
     } // test_winning_game()
 
     #[test]
     fn test_no_winner_game() {
-        let board = Board::from_string("XOX\
-                                        XXO\
-                                        OXO");
+        let board = Board::from_string(
+            "XOX\
+             XXO\
+             OXO",
+        );
         assert_eq!(board.get_game_result(), GameResult::Draw);
     }
 
@@ -608,9 +692,11 @@ mod board_tests {
         let board = Board::new();
         assert_eq!(board.get_game_result(), GameResult::InProgress);
 
-        let board = Board::from_string("XOX\
-                                        X-O\
-                                        OXO");
+        let board = Board::from_string(
+            "XOX\
+             X-O\
+             OXO",
+        );
         assert_eq!(board.get_game_result(), GameResult::InProgress);
     }
 } // mod board_tests

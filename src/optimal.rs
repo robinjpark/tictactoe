@@ -1,12 +1,11 @@
 //! An optimal player, who never loses!
-use crate::board::{Board, Position, GameResult};
+use crate::board::{Board, GameResult, Position};
 use crate::player::Player;
 #[cfg(test)]
 use crate::strategies::RandomPlayer;
 
 /// The OptimalPlayer never loses a game.
-pub struct OptimalPlayer {
-}
+pub struct OptimalPlayer {}
 
 impl Player for OptimalPlayer {
     fn take_turn(&self, board: &Board) -> Position {
@@ -17,7 +16,7 @@ impl Player for OptimalPlayer {
 impl OptimalPlayer {
     fn get_best_move(&self, board: &Board) -> Position {
         // To speed things up, first check if the center is still available.
-        let center = Position::new(1,1);
+        let center = Position::new(1, 1);
         if board.is_position_unused(center) {
             return center;
         }
@@ -61,13 +60,13 @@ impl OptimalPlayer {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::game::Game;
     use crate::board::Token;
+    use crate::game::Game;
 
     #[test]
     fn test_draws_against_itself() {
-        let x = Box::new(OptimalPlayer{});
-        let o = Box::new(OptimalPlayer{});
+        let x = Box::new(OptimalPlayer {});
+        let o = Box::new(OptimalPlayer {});
         let game = Game::new(x, o);
         assert_eq!(game.result(), GameResult::Draw);
     }
@@ -76,13 +75,13 @@ mod tests {
     fn test_never_loses() {
         const NUM_GAMES: u32 = 50;
         for _i in 0..NUM_GAMES {
-            let x = Box::new(OptimalPlayer{});
-            let o = Box::new(RandomPlayer{});
+            let x = Box::new(OptimalPlayer {});
+            let o = Box::new(RandomPlayer {});
             let game = Game::new(x, o);
             assert_ne!(game.result(), GameResult::Win(Token::O));
 
-            let x = Box::new(RandomPlayer{});
-            let o = Box::new(OptimalPlayer{});
+            let x = Box::new(RandomPlayer {});
+            let o = Box::new(OptimalPlayer {});
             let game = Game::new(x, o);
             assert_ne!(game.result(), GameResult::Win(Token::X));
         }
@@ -90,37 +89,52 @@ mod tests {
 
     #[test]
     fn test_single_move_left() {
-        let player = OptimalPlayer{};
-        let board = Board::from_string("XOX\
-                                        OO-\
-                                        XXO");
-        assert_eq!(player.take_turn(&board), Position::new(1,2));
+        let player = OptimalPlayer {};
+        let board = Board::from_string(
+            "XOX\
+             OO-\
+             XXO",
+        );
+        assert_eq!(player.take_turn(&board), Position::new(1, 2));
     }
 
     #[test]
     fn test_winning_move() {
-        let player = OptimalPlayer{};
+        let player = OptimalPlayer {};
 
         println!("Scenario #1");
-        let board = Board::from_string("XO-\
-                                        OO-\
-                                        XX-");
-        assert_eq!(player.take_turn(&board), Position::new(2,2), "Scenario #1 failed");
+        let board = Board::from_string(
+            "XO-\
+             OO-\
+             XX-",
+        );
+        assert_eq!(
+            player.take_turn(&board),
+            Position::new(2, 2),
+            "Scenario #1 failed"
+        );
 
         println!("Scenario #1");
-        let board = Board::from_string("XOX\
-                                        OO-\
-                                        XX-");
-        assert_eq!(player.take_turn(&board), Position::new(1,2), "Scenario #2 failed");
+        let board = Board::from_string(
+            "XOX\
+             OO-\
+             XX-",
+        );
+        assert_eq!(
+            player.take_turn(&board),
+            Position::new(1, 2),
+            "Scenario #2 failed"
+        );
     }
 
     #[test]
     fn test_prevent_loss() {
-        let player = OptimalPlayer{};
-        let board = Board::from_string("XOO\
-                                        OX-\
-                                        XX-");
-        assert_eq!(player.take_turn(&board), Position::new(2,2));
+        let player = OptimalPlayer {};
+        let board = Board::from_string(
+            "XOO\
+             OX-\
+             XX-",
+        );
+        assert_eq!(player.take_turn(&board), Position::new(2, 2));
     }
 }
-

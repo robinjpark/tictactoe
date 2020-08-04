@@ -5,6 +5,5 @@ use crate::board::*;
 pub trait Player {
     /// Implement take_turn() to return the desired Position,
     /// given an in-progress game Board.
-    fn take_turn (&self, board: &Board) -> Position;
+    fn take_turn(&self, board: &Board) -> Position;
 }
-

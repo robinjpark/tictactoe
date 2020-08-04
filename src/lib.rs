@@ -23,8 +23,16 @@ pub fn main() {
     println!("In this version, X always plays first.");
 
     let human_token = get_player();
-    let x: Box<dyn Player> = if human_token == Token::X { Box::new(HumanPlayer::new()) } else { Box::new(OptimalPlayer{}) };
-    let o: Box<dyn Player> = if human_token == Token::X { Box::new(OptimalPlayer{}) } else { Box::new(HumanPlayer::new()) };
+    let x: Box<dyn Player> = if human_token == Token::X {
+        Box::new(HumanPlayer::new())
+    } else {
+        Box::new(OptimalPlayer {})
+    };
+    let o: Box<dyn Player> = if human_token == Token::X {
+        Box::new(OptimalPlayer {})
+    } else {
+        Box::new(HumanPlayer::new())
+    };
     let game = Game::new(x, o);
     display_result(game, human_token);
 }
@@ -36,7 +44,9 @@ fn get_player() -> Token {
 
     loop {
         let mut input = String::new();
-        std::io::stdin().read_line(&mut input).expect("error getting input");
+        std::io::stdin()
+            .read_line(&mut input)
+            .expect("error getting input");
         let input = input.trim();
         let token = match input {
             "X" | "x" => Token::X,
@@ -44,7 +54,7 @@ fn get_player() -> Token {
             &_ => {
                 println!("Enter 'X' or 'O'!");
                 continue;
-            },
+            }
         };
         return token;
     }
@@ -56,7 +66,7 @@ fn display_result(game: Game, human_token: Token) {
             println!("¯\\_(ツ)_/¯");
             println!("It is a draw?");
             println!("ノಠ益ಠ)ノ彡┻━┻");
-        },
+        }
         GameResult::InProgress => panic!("Should not happen!"),
         GameResult::Win(winner) => {
             if winner == human_token {
