@@ -13,6 +13,7 @@ jobs:
   allow_failures:
     - rust: nightly
   include:
+    - name: "Build and test"
     - rust: stable
       name: "Clippy"
       before_script:
