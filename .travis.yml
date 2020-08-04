@@ -9,7 +9,6 @@ rust:
 # The following matrix for adding clippy support was taken from:
 # https://github.com/CAD97/great-ci/blob/master/.travis.yml
 jobs:
-  name: "Build and Test"
   fast_finish: true
   allow_failures:
     - rust: nightly
