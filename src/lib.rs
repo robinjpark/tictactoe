@@ -17,6 +17,7 @@ use crate::human::HumanPlayer;
 use crate::optimal::OptimalPlayer;
 use crate::player::Player;
 
+/// The entry point for the "library", which implements the game.
 pub fn main() {
     println!("Tic-Tac-Toe");
     println!("In this version, X always plays first.");

@@ -1,8 +1,10 @@
+//! An optimal player, who never loses!
 use crate::board::{Board, Position, GameResult};
 use crate::player::Player;
 #[cfg(test)]
 use crate::strategies::RandomPlayer;
 
+/// The OptimalPlayer never loses a game.
 pub struct OptimalPlayer {
 }
 
