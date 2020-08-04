@@ -20,7 +20,7 @@ impl OptimalPlayer {
             return center;
         }
 
-        let who_am_i = board.whose_turn();
+        let who_am_i = board.whose_turn().unwrap();
 
         let mut positions_and_results = Vec::<(Position, GameResult)>::with_capacity(8);
 
@@ -50,7 +50,7 @@ impl OptimalPlayer {
         } else {
             let mut next_board = *board;
             let best_move = self.get_best_move(&next_board);
-            next_board.add_move(next_board.whose_turn(), best_move);
+            next_board.add_move(next_board.whose_turn().unwrap(), best_move);
             self.get_eventual_game_result(&next_board)
         }
     }

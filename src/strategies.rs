@@ -34,7 +34,7 @@ mod random_player_tests {
         for game in 1..MAX_GAMES+1 {
             let mut board = Board::new();
             for _turn in 1..10 {
-                let whose_turn = board.whose_turn();
+                let whose_turn = board.whose_turn().unwrap();
                 let position = player.take_turn(&board);
                 board.add_move(whose_turn, position);
                 if let GameResult::Win(_winner) = board.get_game_result() {
