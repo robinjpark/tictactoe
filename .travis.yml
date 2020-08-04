@@ -18,7 +18,7 @@ matrix:
       before_script:
         - rustup component add clippy
       script:
-        - cargo clippy -- -D clippy
+        - cargo clippy -- -D all
 
 script: |
   cargo build --verbose &&
