@@ -117,11 +117,6 @@ impl Board {
     /// Returns all of the empty positions in a vector
     pub fn empty_positions(&self) -> Vec<Position> {
         let mut vec = Vec::with_capacity(9);
-        // ↓↓↓↓ The following code was added intentionally to test continuous integration of clippy!↓↓↓↓
-        if vec.len() < 0 {
-            panic!("Should never get here!");
-        }
-        // ↑↑↑↑ The preceding code was added intentionally to test continuous integration of clippy!↑↑↑↑
         for row in 0..3 {
             for column in 0..3 {
                 if self.positions[row][column] == None {
