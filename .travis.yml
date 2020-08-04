@@ -24,3 +24,9 @@ jobs:
         - rustup component add clippy
       script:
         - cargo clippy -- -D clippy::all
+    - rust: stable
+      name: "Formatting"
+      before_script:
+        - rustup component add rustfmt
+      script:
+        - cargo fmt -- --check
