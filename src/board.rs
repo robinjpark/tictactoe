@@ -127,16 +127,21 @@ impl Board {
         vec
     }
 
-    // TODO: Rename!  This does not ask "is the board empty?"
+    /// Indicates whether or not the indicated position is empty
     pub fn is_position_unused(&self, position: Position) -> bool {
         self.positions[position.row as usize][position.column as usize] == None
     }
 
-    pub fn whose_turn(&self) -> Token {
-        if self.turn_number % 2 == 1 {
-            Token::X
+    /// Returns whose turn is next, or None if the game is over.
+    pub fn whose_turn(&self) -> Option<Token> {
+        if self.get_game_result() == GameResult::InProgress {
+            if self.turn_number % 2 == 1 {
+                Some(Token::X)
+            } else {
+                Some(Token::O)
+            }
         } else {
-            Token::O
+            None
         }
     }
 
@@ -152,7 +157,7 @@ impl Board {
         #[cfg(debug_assertions)]
         self.check_invariants();
 
-        if player != self.whose_turn() {
+        if player != self.whose_turn().unwrap() {
             panic!("It is not {}'s turn!", player);
         }
         if let Some(_player) = self.positions[at.row as usize][at.column as usize] {
@@ -448,29 +453,42 @@ mod board_tests {
     #[test]
     fn test_whose_turn() {
         let mut board = Board::new();
-        assert_eq!(board.whose_turn(), Token::X);
+        assert_eq!(board.whose_turn(), Some(Token::X));
         board.add_move(Token::X, Position::new(0,0));
-        assert_eq!(board.whose_turn(), Token::O);
+        assert_eq!(board.whose_turn(), Some(Token::O));
+    }
+
+    #[test]
+    fn test_whose_turn_game_over() {
+        let draw = Board::from_string("XOX\
+                                       OOX\
+                                       XXO");
+        assert_eq!(draw.whose_turn(), None);
+
+        let win = Board::from_string("XXX\
+                                      OO-\
+                                      ---");
+        assert_eq!(win.whose_turn(), None);
     }
 
     #[test]
     fn test_add_to_board() {
         let mut board = Board::new();
 
-        board.add_move(Token::X, Position::new(0, 0));
-        assert_eq!(Some(Token::X), board.positions[0][0]);
+        board.add_move(Token::X, Position::new(1, 1));
+        assert_eq!(Some(Token::X), board.positions[1][1]);
         assert_eq!(2, board.turn_number);
 
-        board.add_move(Token::O, Position::new(1, 1));
-        assert_eq!(Some(Token::O), board.positions[1][1]);
+        board.add_move(Token::O, Position::new(0, 0));
+        assert_eq!(Some(Token::O), board.positions[0][0]);
         assert_eq!(3, board.turn_number);
 
         board.add_move(Token::X, Position::new(0, 1));
-        board.add_move(Token::O, Position::new(0, 2));
+        board.add_move(Token::O, Position::new(2, 1));
         board.add_move(Token::X, Position::new(1, 0));
         board.add_move(Token::O, Position::new(1, 2));
         board.add_move(Token::X, Position::new(2, 0));
-        board.add_move(Token::O, Position::new(2, 1));
+        board.add_move(Token::O, Position::new(0, 2));
         assert_eq!(9, board.turn_number);
         board.add_move(Token::X, Position::new(2, 2));
 

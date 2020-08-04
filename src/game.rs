@@ -12,7 +12,7 @@ impl Game {
         let mut board = Board::new();
 
         while board.get_game_result() == GameResult::InProgress {
-            let whose_turn = board.whose_turn();
+            let whose_turn = board.whose_turn().unwrap();
             println!("It is {}'s turn", whose_turn);
             let their_move = if whose_turn == Token::X { x.take_turn(&board) } else { o.take_turn(&board) };
             board.add_move(whose_turn, their_move);
