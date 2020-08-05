@@ -7,7 +7,7 @@ pub fn optimal_player_benchmark(c: &mut Criterion) {
     let player = OptimalPlayer {};
     let mut board = Board::new();
     board.add_move(Token::X, Position::new(1, 1)); // center
-    c.bench_function("optimal_player: turn #2", |b| {
+    c.bench_function("optimal_player_turn_2", |b| {
         b.iter(|| player.take_turn(black_box(&board)))
     });
 }
