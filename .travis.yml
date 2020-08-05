@@ -34,6 +34,17 @@ jobs:
   - name: Build and test on nightly rust
     rust: nightly
 
+  - name: Build and push documentation
+    rust: stable
+    after_success: |
+      [ $TRAVIS_BRANCH = master ] &&
+      [ $TRAVIS_PULL_REQUEST = false ] &&
+      cargo doc --no-deps &&
+      echo "<meta http-equiv=refresh content=0;url=`echo $TRAVIS_REPO_SLUG | cut -d '/' -f 2`/index.html>" > target/doc/index.html &&
+      sudo pip install ghp-import &&
+      ghp-import -n target/doc &&
+      git push -fq https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+
 env:
   global:
     secure: znWecX57SZH70unzm17NyaM+YP/Zl0LZdy65FkfauUuIsKvESB3II1eVAUKPApmssIAwpieKzJfIgy2Kk9mbWgFjlFci6uaOAm971ylbapAqPomII2D1Q5lDFrVUtOgfn3xTS1ei3hB38BxqBuUu66qSWTBoXExvUPlDsBR8zwumBrQGuM1HU4lSkwKB5Nt1EFRk40cxHo5U/eVjImF8+FQF5NyVsk6ApUcsIlcXNqMIswD1GhpRX+YMWpyrc6VZSsq6lWHvITOvS7ouwJJ1CyCutwnjBXupfITQleFLUBNvp1RKrMWCVq30dznvZcZnZoeG/yUsItYjBu0hRy4xoDlVkXhYLar5wrUl+6UAwZT99eFhCQBYWYJfnc9Bf3fAMcrSHPOhyY24CJEQcO7xuOOse0hg5zlVGJkwgiiZTpltz21G2j+7P6KvdV7c/C4WYCr7QnBmz+FTktWp+7XbP0hkGcSXBFrivPLOGG/Icm01xZW05JPQk7SAYnSM5RnnMh1m+nr8+K8b/3aRn2xCjMJtjkfZXsEp5jWPrZCHVYE7OA6Ym/EebJwdNGE44LXZxG6XjlJb55pebwka/Lc7wx6GaF/aEQ3dMKic1WMQu0HKGGuSK/lN8K+CyaUozQtkR4wzq/NCAUIqWh8z0Ba0RB9fcYa4Og+/rGvQyyCVkWY=
