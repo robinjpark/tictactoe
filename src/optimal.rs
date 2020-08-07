@@ -65,8 +65,8 @@ mod tests {
 
     #[test]
     fn test_draws_against_itself() {
-        let x = Box::new(OptimalPlayer {});
-        let o = Box::new(OptimalPlayer {});
+        let x = OptimalPlayer {};
+        let o = OptimalPlayer {};
         let game = Game::new(x, o);
         assert_eq!(game.result(), GameResult::Draw);
     }
@@ -75,13 +75,13 @@ mod tests {
     fn test_never_loses() {
         const NUM_GAMES: u32 = 50;
         for _i in 0..NUM_GAMES {
-            let x = Box::new(OptimalPlayer {});
-            let o = Box::new(RandomPlayer {});
+            let x = OptimalPlayer {};
+            let o = RandomPlayer {};
             let game = Game::new(x, o);
             assert_ne!(game.result(), GameResult::Win(Token::O));
 
-            let x = Box::new(RandomPlayer {});
-            let o = Box::new(OptimalPlayer {});
+            let x = RandomPlayer {};
+            let o = OptimalPlayer {};
             let game = Game::new(x, o);
             assert_ne!(game.result(), GameResult::Win(Token::X));
         }
