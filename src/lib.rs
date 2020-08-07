@@ -31,7 +31,7 @@ pub fn main() {
     let human_token = get_player();
 
     let human = HumanPlayer::new();
-    let computer = OptimalPlayer{};
+    let computer = OptimalPlayer {};
 
     let game = if human_token == Token::X {
         Game::new(human, computer)
