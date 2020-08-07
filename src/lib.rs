@@ -22,7 +22,6 @@ use crate::board::{GameResult, Token};
 use crate::game::Game;
 use crate::human::HumanPlayer;
 use crate::optimal::OptimalPlayer;
-use crate::player::Player;
 
 /// The entry point for the "library", which implements the game.
 pub fn main() {
@@ -30,17 +29,16 @@ pub fn main() {
     println!("In this version, X always plays first.");
 
     let human_token = get_player();
-    let x: Box<dyn Player> = if human_token == Token::X {
-        Box::new(HumanPlayer::new())
+
+    let human = HumanPlayer::new();
+    let computer = OptimalPlayer{};
+
+    let game = if human_token == Token::X {
+        Game::new(human, computer)
     } else {
-        Box::new(OptimalPlayer {})
+        Game::new(computer, human)
     };
-    let o: Box<dyn Player> = if human_token == Token::X {
-        Box::new(OptimalPlayer {})
-    } else {
-        Box::new(HumanPlayer::new())
-    };
-    let game = Game::new(x, o);
+
     display_result(game, human_token);
 }
 
