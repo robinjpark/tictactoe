@@ -30,7 +30,10 @@ pub fn main() {
 
     let human_token = get_player();
 
-    let human = HumanPlayer::new();
+    let stdin = std::io::stdin();
+    let mut input = stdin.lock();
+    let mut output = std::io::stdout();
+    let human = HumanPlayer::new(&mut input, &mut output);
     let computer = OptimalPlayer {};
 
     let game = if human_token == Token::X {

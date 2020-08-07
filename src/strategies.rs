@@ -6,7 +6,7 @@ use rand::Rng;
 pub struct RandomPlayer {}
 
 impl Player for RandomPlayer {
-    fn take_turn(&self, board: &Board) -> Position {
+    fn take_turn(&mut self, board: &Board) -> Position {
         let mut rng = rand::thread_rng();
 
         let empty_positions = board.empty_positions();
@@ -22,7 +22,7 @@ mod random_player_tests {
 
     #[test]
     fn test_random_played_boards_differ() {
-        let player = RandomPlayer {};
+        let mut player = RandomPlayer {};
         //for _n in 1..1000 { // Uncomment to tune MAX_SAME_GAMES
         const MAX_GAMES: u32 = 100;
         const MAX_SAME_GAMES: u32 = 35; // Determined by running this many many times!

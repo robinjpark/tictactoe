@@ -8,7 +8,7 @@ use crate::strategies::RandomPlayer;
 pub struct OptimalPlayer {}
 
 impl Player for OptimalPlayer {
-    fn take_turn(&self, board: &Board) -> Position {
+    fn take_turn(&mut self, board: &Board) -> Position {
         self.get_best_move(board)
     }
 }
@@ -89,7 +89,7 @@ mod tests {
 
     #[test]
     fn test_single_move_left() {
-        let player = OptimalPlayer {};
+        let mut player = OptimalPlayer {};
         let board = Board::from_string(
             "XOX\
              OO-\
@@ -100,7 +100,7 @@ mod tests {
 
     #[test]
     fn test_winning_move() {
-        let player = OptimalPlayer {};
+        let mut player = OptimalPlayer {};
 
         println!("Scenario #1");
         let board = Board::from_string(
@@ -129,7 +129,7 @@ mod tests {
 
     #[test]
     fn test_prevent_loss() {
-        let player = OptimalPlayer {};
+        let mut player = OptimalPlayer {};
         let board = Board::from_string(
             "XOO\
              OX-\

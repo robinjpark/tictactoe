@@ -8,7 +8,7 @@ pub struct Game {
 
 impl Game {
     /// Creates and plays a game between two players, given their strategies.
-    pub fn new(x: impl Player, o: impl Player) -> Game {
+    pub fn new(mut x: impl Player, mut o: impl Player) -> Game {
         let mut board = Board::new();
 
         while board.get_game_result() == GameResult::InProgress {
